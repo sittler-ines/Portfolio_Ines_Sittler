@@ -1,0 +1,66 @@
+# Déploiement automatique : à chaque push sur main, GitHub construit le site
+# puis l'envoie sur le VPS et redémarre les services.
+name: Déploiement
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # bouton "Run workflow" dans l'onglet Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Récupère le code du dépôt
+      - uses: actions/checkout@v4
+
+      # 2. Installe Node 22
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # 3. Installe les dépendances et construit le site
+      - name: Build
+        run: |
+          npm ci || npm install
+          npm run build
+        env:
+          # Adresse de PocketBase en ligne (sert aussi aux liens des images)
+          POCKETBASE_URL: https://pbportfolio.ines-sittler.fr
+
+      # 4. Prépare la connexion SSH avec la clé enregistrée dans les secrets
+      - name: Connexion SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      # 5. Envoie les fichiers sur le serveur (sans node_modules ni la base locale)
+      - name: Envoi des fichiers
+        run: |
+          rsync -az --delete \
+            --exclude node_modules --exclude .git --exclude .env --exclude pocketbase/pb_data \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/portfolio/
+
+      # 6. Sur le serveur : dépendances, migrations PocketBase, redémarrage, vérification
+      - name: Redémarrage sur le serveur
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' <<'EOF'
+          set -e
+          cd ~/portfolio
+          npm ci --omit=dev --no-audit --no-fund || npm install --omit=dev --no-audit --no-fund
+          mkdir -p ~/pocketbase/pb_migrations
+          cp -r ~/portfolio/pocketbase/pb_migrations/. ~/pocketbase/pb_migrations/
+          sudo /usr/bin/systemctl restart pocketbase
+          sudo /usr/bin/systemctl restart portfolio
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsS -o /dev/null http://127.0.0.1:4322/; then echo "Site en ligne"; exit 0; fi
+            sleep 2
+          done
+          echo "Le site ne répond pas :"
+          sudo /usr/bin/journalctl -u portfolio -n 30 --no-pager
+          exit 1
+          EOF

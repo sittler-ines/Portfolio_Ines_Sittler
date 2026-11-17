@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // Ainsi, un projet ajouté dans le tableau de bord apparaît tout de suite sur le site.
 export default defineConfig({
   // À remplacer par l'adresse du site en ligne (sert aux liens canoniques et au partage)
-  site: 'https://www.exemple.fr',
+  site: 'https://portfolio.ines-sittler.fr',
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   server: { port: 4330 },
