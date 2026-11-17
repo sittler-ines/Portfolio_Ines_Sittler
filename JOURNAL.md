@@ -14,10 +14,16 @@
 - Rédaction de mes textes (présentation, parcours, projets) et choix de mes 3 projets : Olyvia, Aegirhall, FlyTapFest.
 - [à compléter : préparation de la soutenance maquette, note de positionnement, prototype]
 
-## Octobre et début novembre 2026
+## Octobre 2026
 - Soutenance maquette : 9,5/20. Retours : métaphores trop littérales (cadres, livres) et absence de grille. Piste conseillée : partir de mon illustration pour un parti pris graphique plus affirmé.
 - Moodboard années 70 validé par mon enseignant : palette crème, rouge, orange, vert, moutarde, brun.
-- [à compléter]
+
+## Vacances de la Toussaint
+- Travail sur la maquette dans Figma, à partir des retours de la soutenance et du nouveau moodboard.
+
+## Semaine du 2 novembre 2026
+- Début du développement du site.
+- Je n'ai pas commité au fur et à mesure : c'est pour ça que l'historique Git est concentré sur la fin du projet. À l'avenir, je committerai à chaque étape.
 
 ## Semaine du 9 novembre 2026
 - 12 novembre : refonte complète. Je conserve mon autoportrait dessiné. Cible : studios d'animation 2D/3D et de jeu vidéo.
