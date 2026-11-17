@@ -1,0 +1,54 @@
+---
+// En-tête : le nom à gauche (il ramène à l'accueil), le menu à droite.
+// Sur mobile, le bouton « menu » ouvre un menu plein écran (script : src/scripts/menu.js).
+import { site } from '../config.js';
+import { conteneur, script } from '../styles/classes.js';
+
+// Lien actif : la page où l'on est (ex. /projets/olyvia active « Projets »)
+const chemin = Astro.url.pathname.replace(/\/$/, '') || '/';
+const actif = (href) => chemin === href || chemin.startsWith(href + '/');
+
+// Classes réutilisées (écrites en entier pour que Tailwind les trouve)
+const logo = `${script} text-[clamp(2rem,4vw,2.75rem)] text-creme no-underline`;
+// Texte crème sur vert : en gras et à 20 px (texte « grand » pour l'accessibilité, contraste suffisant).
+// Souligné invisible, qui apparaît au survol (crème) et sur la page en cours (moutarde, avec aria-current).
+const navLien = 'inline-flex min-h-11 items-center text-xl font-bold text-creme underline decoration-transparent decoration-3 underline-offset-8 transition-colors hover:decoration-creme aria-[current=page]:decoration-moutarde';
+const menuBouton = 'min-h-11 cursor-pointer rounded-xl border-3 border-brun bg-creme px-4.5 py-1.5 font-texte text-[1.05rem] font-semibold text-brun shadow-petite';
+---
+<header class="relative z-40 bg-vert text-creme">
+  <div class={`${conteneur} flex items-center justify-between gap-4 py-4`}>
+    <a href="/" class={logo} aria-label={`${site.nom}, retour à l'accueil`}>{site.nom}</a>
+
+    <nav aria-label="Navigation principale" class="hidden md:block">
+      <ul class="flex items-center gap-8">
+        {site.nav.map((l) => (
+          <li><a href={l.href} aria-current={actif(l.href) ? 'page' : undefined} class={navLien}>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <button type="button" id="menu-bouton" class={`${menuBouton} md:hidden`} aria-expanded="false" aria-controls="menu-mobile">menu</button>
+  </div>
+
+  <!-- Menu mobile plein écran : caché (attribut hidden) tant qu'on ne l'ouvre pas -->
+  <div id="menu-mobile" class="fixed inset-0 z-50 flex flex-col bg-vert md:hidden" hidden>
+    <div class={`${conteneur} flex items-center justify-between py-4`}>
+      <a href="/" class={logo} aria-label={`${site.nom}, retour à l'accueil`}>{site.nom}</a>
+      <button type="button" id="menu-fermer" class={menuBouton}>fermer</button>
+    </div>
+    <nav aria-label="Navigation mobile" class={`${conteneur} flex flex-1 items-center`}>
+      <ul class="flex flex-col gap-3">
+        {site.nav.map((l) => (
+          <li>
+            <a href={l.href} aria-current={actif(l.href) ? 'page' : undefined}
+              class={`${script} text-[clamp(3.2rem,15vw,4.5rem)] text-creme no-underline aria-[current=page]:text-moutarde aria-[current=page]:text-shadow-menu`}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  import '../scripts/menu.js';
+</script>

@@ -1,0 +1,32 @@
+---
+// Une compétence : son logo et son nom, dans une petite tuile qui mène au site officiel de l'outil.
+// Logo : celui envoyé dans PocketBase s'il y en a un, sinon le fichier de src/logos/ qui porte
+// le nom de la compétence (ex. « DaVinci Resolve » → davinciresolve.svg), sinon la première lettre.
+const { nom, lien, logo } = Astro.props;
+
+// Tous les logos de src/logos/, lus comme du texte SVG pour les colorer en brun avec le CSS
+const logos = import.meta.glob('../logos/*.svg', { query: '?raw', import: 'default', eager: true });
+const nomFichier = nom
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // enlève les accents
+  .toLowerCase()
+  .replace(/[^a-z0-9]/g, '');                        // enlève espaces et signes
+const svg = logos[`../logos/${nomFichier}.svg`];
+const Balise = lien ? 'a' : 'div';
+---
+<Balise
+  class:list={[
+    'flex h-full min-h-28 flex-col items-center justify-center gap-2 rounded-2xl border-3 border-brun bg-creme px-2 py-3.5 text-center text-brun no-underline transition duration-150',
+    // Au survol : la tuile passe en moutarde et se soulève, comme les boutons
+    lien && 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-moutarde hover:shadow-petite',
+  ]}
+  href={lien ?? undefined}
+  target={lien ? '_blank' : undefined}
+  rel={lien ? 'noopener' : undefined}
+>
+  <span class="grid size-[2.6rem] place-items-center font-script text-[2.4rem] leading-none [&>img]:size-full [&>svg]:size-full" aria-hidden="true">
+    {logo ? <img src={logo} alt="" width="40" height="40" loading="lazy" /> : svg ? <Fragment set:html={svg} /> : nom.charAt(0)}
+  </span>
+  <span class="text-base leading-tight font-semibold">{nom}</span>
+  {lien && <span class="sr-only"> (site officiel, nouvel onglet)</span>}
+</Balise>
+

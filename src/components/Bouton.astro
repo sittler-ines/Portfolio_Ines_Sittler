@@ -1,0 +1,15 @@
+---
+// Bouton rétro : cerné de brun, avec une ombre décalée qui s'enfonce au survol.
+// Lien si href est donné, sinon <button>. couleur : 'moutarde' (par défaut), 'creme' ou 'rouge'.
+// Texte de 19 px en gras : le crème sur le bouton rouge reste assez contrasté.
+const { href, couleur = 'moutarde', type = 'button', class: classe = '' } = Astro.props;
+const base = 'inline-flex min-h-14 cursor-pointer items-center justify-center rounded-[14px] border-3 border-brun px-7 py-3 font-texte text-[1.2rem] leading-tight font-bold no-underline shadow-bouton transition duration-150 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-bouton-survol active:translate-x-[5px] active:translate-y-[5px] active:shadow-none';
+// Classes écrites en entier pour que Tailwind les trouve
+const couleurs = {
+  moutarde: 'bg-moutarde text-brun',
+  creme: 'bg-creme text-brun',
+  rouge: 'bg-rouge text-creme',
+};
+const classes = [base, couleurs[couleur] ?? couleurs.moutarde, classe];
+---
+{href ? <a href={href} class:list={classes}><slot /></a> : <button type={type} class:list={classes}><slot /></button>}

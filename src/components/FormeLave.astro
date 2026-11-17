@@ -1,0 +1,46 @@
+---
+// Forme molle façon lampe à lave (dessinée dans la maquette Figma). Décorative.
+// forme : 'ronde', 'goutte', 'galet', 'large' ou 'haute' ; couleur : une couleur de la palette.
+// La forme reste à sa place mais se déforme lentement, comme de la cire dans une lampe à lave :
+// on calcule deux variantes du contour, puis la balise SVG <animate> passe de l'une à l'autre.
+// Chaque forme a sa propre durée pour qu'elles ne bougent pas toutes en même temps.
+const { forme = 'ronde', couleur = 'moutarde', class: classe = '' } = Astro.props;
+
+const formes = {
+  ronde: { w: 506, h: 583, duree: 18, d: 'M475.9 296.2C482.7 357.4 524.6 452 495.9 496.7C467.3 541.4 370.3 552.3 304.2 564.3C238.2 576.3 149.9 597.9 99.7 568.6C49.6 539.2 15.3 447.8 3.4 388.5C-8.6 329.3 13.6 276.4 28.2 212.9C42.6 149.4 45.1 34.6 90.4 7.7C135.8-19.2 239.2 31.3 300.2 51.5C361 71.8 426.6 88.5 456 129.3C485.2 170.1 469.3 235 475.9 296.2Z' },
+  goutte: { w: 389, h: 440, duree: 13, d: 'M372.1 223.9C375.6 274.3 402.9 347.8 378.5 383.8C354.1 419.7 273.9 438.1 226 439.5C178 440.9 126.9 417.5 90.7 392.4C54.4 367.4 21.9 328.1 8.5 289.2C-5 250.3-0.7 203.7 9.7 159C20 114.3 34.5 46 70.6 20.7C106.8-4.7 178.4-3.3 226.2 6.8C274.1 17 333.3 45.3 357.6 81.5C381.9 117.7 368.6 173.5 372.1 223.9Z' },
+  galet: { w: 249, h: 235, duree: 10, d: 'M248.8 110.6C246.7 133.5 204.2 158.1 183.5 174.3C162.8 190.4 149.1 197.6 124.7 207.4C100.2 217.3 56.6 243.2 36.8 233.2C17 223.2 11.6 174.3 6 147.6C0.5 120.8-3.1 96.6 3.7 72.8C10.4 49 26.2 15.4 46.5 4.8C66.8-5.8 100.7 3.6 125.5 9C150.4 14.3 175.1 19.8 195.7 36.7C216.2 53.6 250.8 87.7 248.8 110.6Z' },
+  large: { w: 600, h: 542, duree: 21, d: 'M599.6 235.4C607.1 291.5 551.8 371.7 508.3 422.8C464.9 474 394 543 339.1 542.3C284.2 541.6 234.7 452.9 179.2 418.7C123.6 384.5 26.8 381.6 5.9 337C-15 292.4 24.4 197.7 53.8 151.3C83.3 104.8 137.3 83.4 182.7 58.3C228.2 33.1 279.7-4.3 326.4 0.4C373.1 5 417.4 46.9 462.9 86.1C508.4 125.3 592 179.3 599.6 235.4Z' },
+  haute: { w: 463, h: 504, duree: 15, d: 'M462.3 310.3C464.7 365 452.4 448.2 416.7 480.2C381 512.3 297.9 503.2 248.1 502.6C198.3 502 154.7 497.5 118.1 476.7C81.6 455.9 47.7 418.4 28.6 377.9C9.4 337.3-7.1 280.5 3.2 233.5C13.5 186.5 46.2 134.8 90.5 96.1C134.8 57.3 216.7-8.4 268.7 0.9C320.8 10.3 370.3 100.7 402.5 152.3C434.8 203.8 460 255.6 462.3 310.3Z' },
+};
+const f = formes[forme] ?? formes.ronde;
+
+// Le contour est découpé en lettres (M, C, Z) et en nombres (les coordonnées x, y des points).
+const morceaux = f.d.match(/[MCZ]|-?\d*\.?\d+/g);
+
+// Variante du contour : chaque point s'éloigne ou se rapproche un peu du centre,
+// selon une vague (sinus) qui fait le tour de la forme. « decalage » change l'endroit des bosses.
+function variante(decalage, force = 0.07) {
+  const cx = f.w / 2;
+  const cy = f.h / 2;
+  const resultat = [];
+  for (let i = 0; i < morceaux.length; i++) {
+    const m = morceaux[i];
+    if (/[MCZ]/.test(m)) { resultat.push(m); continue; }
+    const x = parseFloat(m);
+    const y = parseFloat(morceaux[++i]); // le nombre suivant est le y du même point
+    const angle = Math.atan2(y - cy, x - cx);
+    const k = 1 + force * Math.sin(3 * angle + decalage);
+    resultat.push(`${(cx + (x - cx) * k).toFixed(1)} ${(cy + (y - cy) * k).toFixed(1)}`);
+  }
+  return resultat.join(' ');
+}
+const etapes = [f.d, variante(0), variante(2.1), f.d].join(';');
+const douceur = '0.45 0 0.55 1'; // accélère puis ralentit à chaque étape
+---
+<svg data-lave class:list={['pointer-events-none overflow-visible', classe]} viewBox={`0 0 ${f.w} ${f.h}`} aria-hidden="true" focusable="false">
+  <path d={f.d} style={`fill: var(--color-${couleur})`}>
+    <animate attributeName="d" values={etapes} dur={`${f.duree}s`} repeatCount="indefinite"
+      calcMode="spline" keyTimes="0;0.33;0.66;1" keySplines={`${douceur};${douceur};${douceur}`} />
+  </path>
+</svg>

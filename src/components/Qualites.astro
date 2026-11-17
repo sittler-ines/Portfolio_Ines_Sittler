@@ -1,0 +1,11 @@
+---
+// Mes qualités (soft skills) : une pastille rétro par qualité, les couleurs de la palette à tour de rôle.
+// Texte en gras à 1.25rem : assez grand pour que le crème sur rouge et sur vert reste lisible.
+const { qualites = [] } = Astro.props;
+const couleurs = ['bg-rouge text-creme', 'bg-moutarde text-brun', 'bg-vert text-creme', 'bg-orange text-brun'];
+---
+<ul class="flex flex-wrap gap-4">
+  {qualites.map((q, i) => (
+    <li class={`rounded-full border-3 border-brun px-5 py-2 text-xl leading-snug font-bold shadow-petite ${couleurs[i % couleurs.length]}`}>{q}</li>
+  ))}
+</ul>

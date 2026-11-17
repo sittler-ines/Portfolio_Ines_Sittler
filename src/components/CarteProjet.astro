@@ -1,0 +1,31 @@
+---
+// Carte rétro d'un projet : capture, bandeau « ce que j'ai fait », titre, résumé, lien.
+// projet : objet Projet (voir src/lib/pocketbase.js). titreNiveau : 'h2' ou 'h3' selon la page.
+// prioritaire : true pour la première carte visible (l'image se charge tout de suite, sans attendre).
+import { carte, lien, script } from '../styles/classes.js';
+const { projet, titreNiveau = 'h3', prioritaire = false } = Astro.props;
+const Titre = titreNiveau;
+---
+<!-- Au survol, la carte se soulève et son ombre grandit -->
+<article class={`${carte} h-full transition duration-200 hover:-translate-x-[3px] hover:-translate-y-[3px] hover:shadow-retro-survol`}>
+  <a href={`/projets/${projet.slug}`} class="flex h-full flex-col no-underline">
+    <!-- La capture, au format 16/10, calée en haut -->
+    <div class="aspect-16/10 overflow-hidden border-b-4 border-brun bg-moutarde">
+      {projet.couverture
+        ? <img
+            src={projet.vignette}
+            srcset={`${projet.vignettePetite} 400w, ${projet.vignette} 800w`}
+            sizes="(min-width: 1024px) 400px, (min-width: 768px) 46vw, 82vw"
+            alt="" loading={prioritaire ? 'eager' : 'lazy'} width="800" height="450"
+            class="size-full object-cover object-top" />
+        : <span class={`${script} grid h-full place-items-center text-5xl`}>{projet.titre}</span>}
+    </div>
+    <!-- Ce que j'ai fait : bandeau brun et texte moutarde (bon contraste) -->
+    {projet.role && <p class="bg-brun px-6 py-2 leading-snug font-semibold text-moutarde italic">{projet.role}</p>}
+    <div class="flex flex-1 flex-col px-6 pb-6 pt-3">
+      <Titre class={`${script} text-carte text-rouge`}>{projet.titre}</Titre>
+      {projet.resume && <p class="mt-1">{projet.resume}</p>}
+      <span class={`${lien} mt-auto pt-4`}>Voir le projet <span aria-hidden="true">→</span></span>
+    </div>
+  </a>
+</article>

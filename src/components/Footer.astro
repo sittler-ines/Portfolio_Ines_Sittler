@@ -1,0 +1,67 @@
+---
+import { conteneur, script } from '../styles/classes.js';
+// Pied de page : un grand bloc moutarde qui arrive avec une vague.
+// À gauche : qui je suis et un bouton vers le formulaire. Puis les pages et mes réseaux.
+// En bas, dans le même bloc : le droit d'auteur et les pages légales.
+// Pas d'adresse e-mail : on écrit à Inès avec le formulaire de la page Contact.
+import { site } from '../config.js';
+import Vague from './Vague.astro';
+import Bouton from './Bouton.astro';
+
+const pages = [{ label: 'Accueil', href: '/' }, ...site.nav];
+const reseaux = [
+  { label: 'Behance', href: site.behance },
+  { label: 'LinkedIn', href: site.linkedin },
+];
+const legal = [
+  { label: 'Mentions légales', href: '/mentions-legales' },
+  { label: 'Données personnelles', href: '/confidentialite' },
+  { label: 'Plan du site', href: '/plan-du-site' },
+];
+const annee = new Date().getFullYear();
+
+// Liens du pied de page : brun et gras, soulignés au survol (classes écrites en entier pour Tailwind)
+const piedLien = 'inline-flex min-h-11 items-center gap-[0.3em] font-semibold underline decoration-transparent decoration-2 underline-offset-[5px] hover:decoration-current';
+const piedTitre = `${script} text-[2.4rem]`;
+---
+<!-- Fond moutarde, texte brun (bon contraste) -->
+<footer class="mt-24 bg-moutarde text-brun">
+  <Vague retournee />
+  <div class={`${conteneur} grid gap-10 pb-12 pt-8 md:grid-cols-[1.6fr_1fr_1fr] md:pt-12`}>
+    <div>
+      <p class={`${script} text-[clamp(3rem,6vw,4.5rem)]`}>{site.nom}</p>
+      <p class="mt-3 text-lg italic">{site.role} · Montbéliard</p>
+      <p class="mt-1 font-semibold">{site.recherche}</p>
+      <div class="mt-6"><Bouton href="/contact" couleur="rouge">M'écrire</Bouton></div>
+    </div>
+
+    <nav aria-labelledby="pied-pages">
+      <h2 id="pied-pages" class={piedTitre}>Pages</h2>
+      <ul class="mt-3">
+        {pages.map((l) => <li><a href={l.href} class={`${piedLien} text-[1.15rem]`}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class={piedTitre}>Me suivre</h2>
+      <ul class="mt-3">
+        {reseaux.map((l) => (
+          <li><a href={l.href} target="_blank" rel="noopener" class={`${piedLien} text-[1.15rem]`}>{l.label}<span class="sr-only"> (nouvel onglet)</span> <span aria-hidden="true">↗</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class={conteneur}>
+    <!-- Ligne du bas, séparée par un trait brun -->
+    <div class="flex border-t-2 border-brun text-base flex-col gap-2 py-5 md:flex-row md:items-center md:justify-between">
+      <p>© {annee} {site.nom}. Dessins et textes : tous droits réservés.</p>
+      <nav aria-label="Informations légales">
+        <ul class="flex flex-wrap gap-x-6">
+          {legal.map((l) => <li><a href={l.href} class={`${piedLien} text-base`}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
+

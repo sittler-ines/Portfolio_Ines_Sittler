@@ -1,0 +1,31 @@
+---
+// Trame de points façon impression des années 70 (demi-teinte) : une transition entre deux fonds.
+// Chaque rangée de points est un peu plus petite que la précédente, ce qui fait un dégradé.
+//   sens « descend » : gros points en haut qui rapetissent vers le bas (on entre dans la section)
+//   sens « monte »   : petits points en haut qui grossissent vers le bas (on sort de la section)
+// id : nom unique, obligatoire si la page contient plusieurs trames.
+const { couleur = 'brun', sens = 'descend', id = 'trame' } = Astro.props;
+
+const pas = 18;      // distance entre deux points, en pixels
+const rangees = 9;   // nombre de rangées de points
+
+const rangs = Array.from({ length: rangees }, (_, i) => {
+  const t = i / (rangees - 1);                  // 0 pour la première rangée, 1 pour la dernière
+  const taille = sens === 'descend' ? 1 - t : t; // 1 = gros point, 0 = tout petit
+  return {
+    y: i * pas,
+    rayon: (0.06 + 0.68 * taille) * pas,
+    decalage: i % 2 ? pas / 2 : 0,               // une rangée sur deux est décalée, comme en imprimerie
+  };
+});
+---
+<svg class="relative block" width="100%" height={rangees * pas} aria-hidden="true" focusable="false">
+  <defs>
+    {rangs.map((r, i) => (
+      <pattern id={`${id}-${i}`} x={r.decalage} width={pas} height={pas} patternUnits="userSpaceOnUse">
+        <circle cx={pas / 2} cy={pas / 2} r={r.rayon} style={`fill: var(--color-${couleur})`} />
+      </pattern>
+    ))}
+  </defs>
+  {rangs.map((r, i) => <rect y={r.y} width="100%" height={pas} fill={`url(#${id}-${i})`} />)}
+</svg>

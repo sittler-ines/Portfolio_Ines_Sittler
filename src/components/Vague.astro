@@ -1,0 +1,15 @@
+---
+// Vague qui fait la transition entre deux fonds. Décorative : cachée aux lecteurs d'écran.
+// Par défaut : vague brune en bas du haut vert des pages (on passe au fond brun).
+// retournee : la vague est à l'envers, pour le haut d'un bloc (ex. le pied de page).
+const { couleur = 'brun', retournee = false } = Astro.props;
+---
+<svg
+  class:list={['relative block h-[clamp(40px,6vw,80px)] w-full', retournee ? '-mt-0.5 -scale-y-100' : '-mb-0.5']}
+  viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true" focusable="false"
+>
+  <path
+    d="M0 40 C 86 -10 154 -10 240 40 C 326 90 394 90 480 40 C 566 -10 634 -10 720 40 C 806 90 874 90 960 40 C 1046 -10 1114 -10 1200 40 C 1286 90 1354 90 1440 40 L 1440 80 L 0 80 Z"
+    style={`fill: var(--color-${couleur})`}
+  />
+</svg>
