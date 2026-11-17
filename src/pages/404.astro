@@ -1,0 +1,22 @@
+---
+import { conteneur, haut, leadHaut, titreEcho } from '../styles/classes.js';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Vague from '../components/Vague.astro';
+import FormeLave from '../components/FormeLave.astro';
+import Bouton from '../components/Bouton.astro';
+---
+
+<BaseLayout titre="Page introuvable" description="Cette page n'existe pas ou a été déplacée.">
+  <section class={`${haut}`} aria-labelledby="titre-404">
+    <FormeLave forme="ronde" couleur="moutarde" class="absolute -right-24 -top-10 w-72" />
+    <div class={`${conteneur} relative pb-12 pt-2`}>
+      <h1 id="titre-404" class={`${titreEcho} text-titre`}>Oups !</h1>
+      <p class={`${leadHaut} mt-6`}>Cette page n'existe pas ou a été déplacée.</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Bouton href="/">Retour à l'accueil</Bouton>
+        <Bouton href="/projets" couleur="creme">Voir mes projets</Bouton>
+      </div>
+    </div>
+    <Vague />
+  </section>
+</BaseLayout>

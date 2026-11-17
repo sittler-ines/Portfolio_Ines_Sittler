@@ -1,0 +1,110 @@
+---
+import { carte, carteBandeau, champ, conteneur, haut, leadHaut, lien, perso, titreEcho } from '../styles/classes.js';
+import { Image } from 'astro:assets';
+// Autoportrait : Astro le convertit en WebP et en plusieurs tailles (plus léger à charger)
+import autoportrait from '../assets/autoportrait.png';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Vague from '../components/Vague.astro';
+import FormeLave from '../components/FormeLave.astro';
+import Bouton from '../components/Bouton.astro';
+import { envoyerMessage } from '../lib/pocketbase.js';
+
+// Le formulaire est envoyé à cette même page (POST). On vérifie les champs ici, côté serveur,
+// puis on enregistre le message dans PocketBase (collection « messages »).
+let valeurs = { nom: '', email: '', message: '' };
+let erreurs = /** @type {Record<string, string>} */ ({});
+let erreurGenerale = '';
+let envoye = false;
+
+if (Astro.request.method === 'POST') {
+  const donnees = await Astro.request.formData();
+  const lire = (/** @type {string} */ cle) => String(donnees.get(cle) ?? '').trim();
+  valeurs = { nom: lire('nom'), email: lire('email'), message: lire('message') };
+
+  if (lire('site_web')) {
+    // Champ piège rempli : c'est un robot. On fait comme si c'était envoyé.
+    envoye = true;
+  } else {
+    if (valeurs.nom.length < 2 || valeurs.nom.length > 100) erreurs.nom = 'Ton nom doit faire entre 2 et 100 caractères.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valeurs.email)) erreurs.email = 'Cette adresse e-mail ne semble pas valide.';
+    if (valeurs.message.length < 10 || valeurs.message.length > 5000) erreurs.message = 'Ton message doit faire entre 10 et 5000 caractères.';
+
+    if (Object.keys(erreurs).length === 0) {
+      try {
+        await envoyerMessage(valeurs);
+        envoye = true;
+      } catch {
+        erreurGenerale = "L'envoi n'a pas marché. Réessaie dans un instant.";
+      }
+    }
+  }
+}
+---
+
+<BaseLayout titre="Contact" description="Écrire à Inès Sittler : une question, un projet, une proposition de stage.">
+  <section class={`${haut}`} aria-labelledby="titre-contact">
+    <FormeLave forme="ronde" couleur="moutarde" class="absolute -right-14 -top-14 w-28 md:-right-28 md:-top-10 md:w-105" />
+    <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
+      <h1 id="titre-contact" class={`${titreEcho} text-titre`}>{envoye ? 'Merci !' : 'Contact'}</h1>
+      <p class={`${leadHaut} mt-6 max-w-[52ch]`}>
+        {envoye
+          ? 'Ton message est bien parti. Je réponds rapidement.'
+          : "Une question, un mot sur mon travail ou simplement l'envie d'échanger : laisse-moi un message, je réponds rapidement."}
+      </p>
+    </div>
+    <Vague />
+  </section>
+
+  <section class={`${conteneur} pt-14`}>
+    {envoye ? (
+      <div class="flex flex-wrap gap-4" role="status">
+        <Bouton href="/">Retour à l'accueil</Bouton>
+        <Bouton href="/projets" couleur="creme">Voir mes projets</Bouton>
+      </div>
+    ) : (
+      <div class="grid items-start gap-12 md:grid-cols-[1.4fr_1fr]">
+        <form method="post" action="/contact" novalidate class={`${carte}`}>
+          <h2 class={`${carteBandeau} bg-rouge text-creme`}>Écris-moi</h2>
+          <div class="px-6 py-6 md:px-10 md:py-8">
+            {erreurGenerale && <p role="alert" class="mb-6 rounded-xl border-[3px] border-rouge bg-white/60 px-4 py-3 font-semibold">{erreurGenerale}</p>}
+
+            <div class="mb-6">
+              <label for="nom" class="mb-2 block font-semibold">Nom</label>
+              <input id="nom" name="nom" type="text" required maxlength="100" autocomplete="name" value={valeurs.nom} class={`${champ}`}
+                aria-invalid={erreurs.nom ? 'true' : undefined} aria-describedby={erreurs.nom ? 'erreur-nom' : undefined} />
+              {erreurs.nom && <p id="erreur-nom" class="mt-2 font-semibold">Erreur : {erreurs.nom}</p>}
+            </div>
+
+            <div class="mb-6">
+              <label for="email" class="mb-2 block font-semibold">E-mail</label>
+              <input id="email" name="email" type="email" required maxlength="200" autocomplete="email" value={valeurs.email} class={`${champ}`}
+                aria-invalid={erreurs.email ? 'true' : undefined} aria-describedby={erreurs.email ? 'erreur-email' : undefined} />
+              {erreurs.email && <p id="erreur-email" class="mt-2 font-semibold">Erreur : {erreurs.email}</p>}
+            </div>
+
+            <div class="mb-6">
+              <label for="message" class="mb-2 block font-semibold">Message</label>
+              <textarea id="message" name="message" rows="6" required minlength="10" maxlength="5000" class={`${champ}`}
+                aria-invalid={erreurs.message ? 'true' : undefined} aria-describedby={erreurs.message ? 'erreur-message' : undefined}>{valeurs.message}</textarea>
+              {erreurs.message && <p id="erreur-message" class="mt-2 font-semibold">Erreur : {erreurs.message}</p>}
+            </div>
+
+            <!-- Champ piège contre les robots : invisible pour les humains -->
+            <div class="absolute left-[-9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+              <label for="site_web">Ne pas remplir</label>
+              <input id="site_web" name="site_web" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <p class="mb-6 text-base italic">Ton nom et ton e-mail servent seulement à te répondre. Voir la page <a href="/confidentialite" class={`${lien}`}>Données personnelles</a>.</p>
+            <Bouton type="submit" couleur="rouge">Envoyer</Bouton>
+          </div>
+        </form>
+
+        <div class="relative mx-auto w-full max-w-95">
+          <FormeLave forme="haute" couleur="orange" class="absolute inset-0 h-full w-full" />
+          <Image src={autoportrait} alt="" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" loading="eager" class={`${perso} relative mx-auto w-[88%] pt-[10%]`} />
+        </div>
+      </div>
+    )}
+  </section>
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import { carte, conteneur, haut, texteRiche, titreEcho } from '../styles/classes.js';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Vague from '../components/Vague.astro';
+import { site } from '../config.js';
+// Mentions obligatoires pour un site personnel (loi pour la confiance dans l'économie numérique, LCEN).
+// Les éléments entre crochets [ ] sont à compléter par Inès avant la mise en ligne.
+---
+
+<BaseLayout titre="Mentions légales" description="Mentions légales du portfolio d'Inès Sittler : éditrice, hébergement, propriété intellectuelle et crédits.">
+  <section class={`${haut}`} aria-labelledby="titre-mentions">
+    <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
+      <h1 id="titre-mentions" class={`${titreEcho} text-[clamp(3.5rem,10vw,7rem)]`}>Mentions légales</h1>
+    </div>
+    <Vague />
+  </section>
+
+  <div class={`${conteneur} pt-14`}>
+    <div class={`${carte} mx-auto max-w-215`}>
+      <div class={`${texteRiche} px-6 py-8 md:px-12 md:py-10`}>
+        <h2>Éditrice du site</h2>
+        <p>Ce site est le portfolio personnel et non commercial d'{site.nom}, étudiante en BUT Métiers du Multimédia et de l'Internet à Montbéliard.</p>
+        <p>Directrice de la publication : {site.nom}.</p>
+        <p>Pour me contacter : le <a href="/contact">formulaire de contact</a>.</p>
+
+        <h2>Hébergement</h2>
+        <p>Le site et sa base de données sont hébergés par : [nom de l'hébergeur], [adresse de l'hébergeur], [numéro de téléphone ou site web de l'hébergeur].</p>
+
+        <h2>Propriété intellectuelle</h2>
+        <p>Les dessins, illustrations, textes et visuels de ce site appartiennent à {site.nom}, sauf mention contraire. Toute reproduction, même partielle, sans mon autorisation est interdite.</p>
+        <p>Les projets réalisés en équipe (Olyvia) appartiennent à toute l'équipe. Les captures des sites présentés montrent des projets réalisés pendant ma formation.</p>
+
+        <h2>Liens vers d'autres sites</h2>
+        <p>Ce site contient des liens vers Behance, LinkedIn et les sites de mes projets. Je ne suis pas responsable du contenu de ces sites.</p>
+
+        <h2>Données personnelles et cookies</h2>
+        <p>Ce site n'utilise aucun cookie de suivi ni outil de mesure d'audience. Ce qui concerne le formulaire de contact est expliqué sur la page <a href="/confidentialite">Données personnelles</a>.</p>
+
+        <h2>Crédits</h2>
+        <p>Polices : Yellowtail (Astigmatic) et Gelasio (Eben Sorkin), sous licence SIL Open Font License. Site conçu et réalisé par {site.nom} avec Astro, Tailwind CSS et PocketBase.</p>
+        <p>Logos des outils : Simple Icons (licence CC0), svgl pour Affinity, Codicons de Microsoft (licence CC BY 4.0) pour VS Code, et le logo de Procreate tiré de son site officiel. Les marques et logos appartiennent à leurs propriétaires respectifs.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

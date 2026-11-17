@@ -1,0 +1,86 @@
+---
+import { carte, carteBandeau, conteneur, haut, perso, script, titreEcho, titreSection } from '../styles/classes.js';
+import { Image } from 'astro:assets';
+// Autoportrait : Astro le convertit en WebP et en plusieurs tailles (plus léger à charger)
+import autoportrait from '../assets/autoportrait.png';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Competence from '../components/Competence.astro';
+import Vague from '../components/Vague.astro';
+import FormeLave from '../components/FormeLave.astro';
+import Bouton from '../components/Bouton.astro';
+import Qualites from '../components/Qualites.astro';
+import { getCompetences, getQualites } from '../lib/pocketbase.js';
+
+// Compétences lues dans PocketBase, déjà regroupées par catégorie
+const groupes = await getCompetences();
+// Mes qualités (soft skills), lues dans PocketBase
+const qualites = await getQualites();
+// Couleur du bandeau de chaque catégorie (classes écrites en entier pour Tailwind)
+const bandeaux = ['bg-rouge text-creme', 'bg-orange text-brun', 'bg-vert text-creme'];
+
+const parcours = [
+  { date: "2025 — aujourd'hui", titre: 'BUT MMI, 2e année', lieu: 'Montbéliard, parcours Création numérique', texte: "Métiers du Multimédia et de l'Internet : design graphique, développement web, audiovisuel et communication." },
+  { date: '2025', titre: 'Bac STMG', lieu: 'Lycée Koeberlé, Sélestat', texte: "Spécialité Systèmes d'information de gestion (SIG)." },
+];
+---
+
+<BaseLayout titre="À propos" description="Qui est Inès Sittler : étudiante en BUT MMI à Montbéliard, elle dessine des personnages et veut faire de l'animation.">
+  <section class={`${haut}`} aria-labelledby="titre-apropos">
+    <FormeLave forme="goutte" couleur="rouge" class="absolute -left-24 bottom-10 hidden w-48 md:block" />
+    <div class={`${conteneur} relative grid items-center gap-10 pb-10 pt-2 md:grid-cols-[1fr_1.2fr] md:pb-14`}>
+      <div class="relative mx-auto w-full max-w-115">
+        <FormeLave forme="ronde" couleur="moutarde" class="absolute inset-0 h-full w-full" />
+        <Image src={autoportrait} alt="Autoportrait dessiné d'Inès" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" loading="eager" class={`${perso} relative mx-auto w-[90%] pt-[8%]`} />
+      </div>
+      <div>
+        <h1 id="titre-apropos" class={`${titreEcho} text-[clamp(4rem,9vw,7.5rem)]`}>Moi, c'est Inès</h1>
+        <div class={`${carte} mt-6 flex max-w-[60ch] flex-col gap-4 px-6 py-6 text-[1.15rem] md:px-8`}>
+          <p>Je m'appelle Inès Sittler, je suis en 2e année de BUT Métiers du Multimédia et de l'Internet à Montbéliard, dans le parcours Création numérique. Je l'ai choisi parce que c'est la création qui me plaît le plus.</p>
+          <p>Ce que j'adore, c'est raconter des histoires. Je dessine surtout des personnages, en traditionnel comme sur tablette, et plus tard je veux faire de l'animation, en 2D comme en 3D.</p>
+          <p>En dehors du dessin, j'aime le cinéma, surtout les dramas. Côté lecture, je suis très fantastique et historique ; et si je ne devais citer qu'un livre, ce serait un classique : <cite>Orgueil et Préjugés</cite> de Jane Austen.</p>
+        </div>
+      </div>
+    </div>
+    <Vague />
+  </section>
+
+  {groupes.length > 0 && (
+    <section class={`${conteneur} pt-16`} aria-labelledby="titre-competences">
+      <h2 id="titre-competences" class={`${titreSection} text-moutarde`}>Ma boîte à outils</h2>
+      <ul class="mt-10 grid gap-8 md:grid-cols-3">
+        {groupes.map((g, i) => (
+          <li class={`${carte}`}>
+            <h3 class={`${carteBandeau} ${bandeaux[i % bandeaux.length]}`}>{g.categorie}</h3>
+            <ul class="grid grid-cols-2 gap-3 p-5 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
+              {g.items.map((c) => <li><Competence {...c} /></li>)}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {qualites.length > 0 && (
+    <section class={`${conteneur} pt-20`} aria-labelledby="titre-qualites">
+      <h2 id="titre-qualites" class={`${titreSection} text-moutarde`}>Ce qu'on dit de moi</h2>
+      <div class="mt-10"><Qualites qualites={qualites} /></div>
+    </section>
+  )}
+
+  <section class={`${conteneur} pt-20`} aria-labelledby="titre-parcours">
+    <h2 id="titre-parcours" class={`${titreSection} text-moutarde`}>Mon parcours</h2>
+    <ol class="mt-10 grid gap-8 md:grid-cols-2">
+      {parcours.map((e) => (
+        <li class={`${carte}`}>
+          <p class={`${carteBandeau} bg-moutarde text-brun`}>{e.date}</p>
+          <div class="px-6 py-5">
+            <h3 class={`${script} text-5xl text-rouge`}>{e.titre}</h3>
+            <p class="mt-2 font-semibold">{e.lieu}</p>
+            <p class="mt-1">{e.texte}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <div class="mt-12"><Bouton href="/contact">M'écrire</Bouton></div>
+  </section>
+</BaseLayout>

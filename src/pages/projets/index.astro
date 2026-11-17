@@ -1,0 +1,53 @@
+---
+import { conteneur, haut, lead, titreEcho } from '../../styles/classes.js';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Vague from '../../components/Vague.astro';
+import FormeLave from '../../components/FormeLave.astro';
+import CarteProjet from '../../components/CarteProjet.astro';
+import { getProjets } from '../../lib/pocketbase.js';
+
+// Filtre dans l'adresse : /projets?type=pro ou ?type=perso (absent = tous les projets)
+const param = Astro.url.searchParams.get('type');
+const type = param === 'pro' || param === 'perso' ? param : undefined;
+const projets = await getProjets({ type });
+
+// Onglet de filtre : bouton rétro, moutarde quand il est actif (classes écrites en entier pour Tailwind)
+const onglet = 'inline-flex min-h-12 items-center rounded-xl border-3 border-brun px-5.5 py-1 font-semibold text-brun no-underline shadow-petite transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-mini';
+
+const onglets = [
+  { label: 'Tous', href: '/projets', valeur: undefined },
+  { label: 'Pro', href: '/projets?type=pro', valeur: 'pro' },
+  { label: 'Perso', href: '/projets?type=perso', valeur: 'perso' },
+];
+---
+
+<BaseLayout titre="Projets" description="Les projets d'Inès Sittler, étudiante en BUT MMI : sites web, vidéo et dessin.">
+  <section class={`${haut}`} aria-labelledby="titre-projets">
+    <FormeLave forme="ronde" couleur="moutarde" class="absolute -right-16 -top-12 w-36 md:-right-24 md:-top-10 md:w-105" />
+    <FormeLave forme="galet" couleur="rouge" class="absolute right-[20%] top-[55%] hidden w-36 md:block" />
+    <div class={`${conteneur} relative pb-10 pt-4 md:pb-14`}>
+      <h1 id="titre-projets" class={`${titreEcho} text-titre`}>Ce que j'ai créé</h1>
+      <nav aria-label="Filtrer les projets" class="mt-8">
+        <ul class="flex flex-wrap gap-3">
+          {onglets.map((o) => {
+            const actif = o.valeur === type;
+            return <li><a href={o.href} aria-current={actif ? 'page' : undefined} class:list={[onglet, actif ? 'bg-moutarde' : 'bg-creme']}>{o.label}</a></li>;
+          })}
+        </ul>
+      </nav>
+    </div>
+    <Vague />
+  </section>
+
+  <section class={`${conteneur} pt-14`} aria-label="Liste des projets">
+    <p class="mb-8 italic">{projets.length} projet{projets.length > 1 ? 's' : ''}</p>
+    {projets.length > 0 ? (
+      <ul class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        {projets.map((p, i) => <li><CarteProjet projet={p} titreNiveau="h2" prioritaire={i === 0} /></li>)}
+      </ul>
+    ) : (
+      <p class={`${lead}`}>Aucun projet dans cette catégorie pour le moment.</p>
+    )}
+  </section>
+</BaseLayout>
+

@@ -1,0 +1,152 @@
+---
+import { carte, carteBandeau, conteneur, haut, leadHaut, lien, lienHaut, script, texteRiche, titreEcho, titreSection } from '../../styles/classes.js';
+// Page d'un projet : l'étude de cas (contexte, rôle, processus, choix techniques, résultat).
+// Chaque partie s'affiche seulement si elle est remplie dans PocketBase.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Vague from '../../components/Vague.astro';
+import FormeLave from '../../components/FormeLave.astro';
+import Bouton from '../../components/Bouton.astro';
+import Competence from '../../components/Competence.astro';
+import Qualites from '../../components/Qualites.astro';
+import { getProjet, getProjets } from '../../lib/pocketbase.js';
+
+const projet = await getProjet(Astro.params.slug);
+if (!projet) return Astro.rewrite('/404');
+
+// Projet suivant (on revient au premier après le dernier)
+const tous = await getProjets();
+const index = tous.findIndex((p) => p.slug === projet.slug);
+const suivant = tous.length > 1 ? tous[(index + 1) % tous.length] : null;
+
+// Les 5 parties de l'étude de cas, avec la couleur de leur bandeau
+const parties = [
+  { titre: 'Le contexte et la commande', html: projet.contexte, couleurs: 'bg-moutarde text-brun' },
+  { titre: 'Mon rôle', html: projet.monRole, couleurs: 'bg-orange text-brun' },
+  { titre: 'Mon processus', html: projet.processus, couleurs: 'bg-vert text-creme' },
+  { titre: 'Mes choix techniques', html: projet.technique, couleurs: 'bg-rouge text-creme' },
+  { titre: 'Le résultat', html: projet.resultat, couleurs: 'bg-moutarde text-brun' },
+].filter((p) => p.html);
+
+const fiche = [
+  ['Type', projet.type === 'perso' ? 'Projet personnel' : 'Projet de BUT MMI'],
+  ['Année', projet.annee],
+  ['Équipe', projet.equipe],
+  ["Ce que j'ai fait", projet.role],
+  // Les outils en texte, seulement si aucun outil n'est coché (sinon ils s'affichent avec leur logo)
+  ['Outils', projet.outilsLies.length ? '' : projet.outils.join(', ')],
+].filter(([, valeur]) => valeur);
+
+// Vidéo : YouTube et Vimeo intégrés sans cookies de suivi, sinon un simple lien
+function lireVideo(url) {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    const hote = u.hostname.replace(/^www\./, '');
+    if (hote === 'youtube.com' && u.searchParams.get('v')) return { iframe: `https://www.youtube-nocookie.com/embed/${u.searchParams.get('v')}` };
+    if (hote === 'youtu.be') return { iframe: `https://www.youtube-nocookie.com/embed${u.pathname}` };
+    if (hote === 'vimeo.com') return { iframe: `https://player.vimeo.com/video${u.pathname}?dnt=1` };
+  } catch {}
+  return { lien: url };
+}
+const video = lireVideo(projet.video);
+---
+
+<BaseLayout titre={projet.titre} description={projet.resume || `Le projet ${projet.titre}, par Inès Sittler.`} image={projet.couverture ?? undefined}>
+  <section class={`${haut}`} aria-labelledby="titre-projet">
+    <FormeLave forme="haute" couleur="moutarde" class="absolute -right-16 -top-16 w-36 md:-right-20 md:w-96" />
+    <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
+      <a href="/projets" class={`${lienHaut} inline-flex min-h-11 items-center`}><span aria-hidden="true">←&nbsp;</span>Tous les projets</a>
+      <h1 id="titre-projet" class={`${titreEcho} text-titre mt-2`}>{projet.titre}</h1>
+      {projet.resume && <p class={`${leadHaut} mt-6 max-w-[56ch]`}>{projet.resume}</p>}
+    </div>
+    <Vague />
+  </section>
+
+  <div class={`${conteneur} pt-14`}>
+    {projet.couverture && (
+      <figure class={`${carte}`}>
+        <img
+          src={projet.vignetteGrande}
+          srcset={`${projet.vignette} 800w, ${projet.vignetteGrande} 1200w`}
+          sizes="(min-width: 1280px) 1200px, 92vw"
+          alt={`Capture du site ${projet.titre}`} width="1200" height="675" fetchpriority="high" class="w-full" />
+      </figure>
+    )}
+
+    <div class="mt-16 grid items-start gap-10 lg:grid-cols-[1fr_360px]">
+      <!-- L'étude de cas -->
+      <div class="flex flex-col gap-10">
+        {parties.map((p) => (
+          <section class={`${carte}`}>
+            <h2 class={`${carteBandeau} ${p.couleurs}`}>{p.titre}</h2>
+            <div class={`${texteRiche} px-6 py-6 md:px-8`} set:html={p.html} />
+          </section>
+        ))}
+      </div>
+
+      <!-- La fiche du projet -->
+      <aside class={`${carte} lg:sticky lg:top-6`} aria-labelledby="titre-fiche">
+        <h2 id="titre-fiche" class={`${carteBandeau} bg-rouge text-creme`}>En bref</h2>
+        <dl class="px-6 py-4">
+          {fiche.map(([nom, valeur]) => (
+            <div class="border-b-2 border-brun/15 py-3 last:border-0">
+              <dt class="font-semibold italic">{nom}</dt>
+              <dd class="mt-1">{valeur}</dd>
+            </div>
+          ))}
+        </dl>
+        {projet.lien && <p class="px-6 pb-6"><a href={projet.lien} target="_blank" rel="noopener" class={`${lien}`}>Voir le site en ligne</a></p>}
+      </aside>
+    </div>
+
+    <!-- Outils et qualités liés au projet (cochés dans PocketBase), sur toute la largeur -->
+    {(projet.outilsLies.length > 0 || projet.qualites.length > 0) && (
+      <div class="mt-10 grid items-start gap-10 md:grid-cols-[1fr_2fr]">
+        {projet.outilsLies.length > 0 && (
+          <section class={`${carte}`}>
+            <h2 class={`${carteBandeau} bg-vert text-creme`}>Outils utilisés</h2>
+            <ul class="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-3 p-5">
+              {projet.outilsLies.map((c) => <li><Competence {...c} /></li>)}
+            </ul>
+          </section>
+        )}
+        {projet.qualites.length > 0 && (
+          <section class={`${carte}`}>
+            <h2 class={`${carteBandeau} bg-orange text-brun`}>Ce que ce projet montre de moi</h2>
+            <div class="p-6"><Qualites qualites={projet.qualites} /></div>
+          </section>
+        )}
+      </div>
+    )}
+
+    {video && (
+      <section class="mt-16" aria-labelledby="titre-video">
+        <h2 id="titre-video" class={`${titreSection} text-moutarde`}>En vidéo</h2>
+        <div class={`${carte} mt-8`}>
+          {video.iframe
+            ? <iframe src={video.iframe} title={`Vidéo du projet ${projet.titre}`} class="aspect-video w-full" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen />
+            : <p class="p-6"><a href={video.lien} class={`${lien}`}>Voir la vidéo</a></p>}
+        </div>
+      </section>
+    )}
+
+    {projet.galerie.length > 0 && (
+      <section class="mt-16" aria-labelledby="titre-images">
+        <h2 id="titre-images" class={`${titreSection} text-moutarde`}>En images</h2>
+        <ul class="mt-8 grid gap-8 md:grid-cols-2">
+          {projet.galerie.map((url, i) => <li class={`${carte}`}><img src={url} alt={`${projet.titre}, image ${i + 1}`} loading="lazy" class="w-full" /></li>)}
+        </ul>
+      </section>
+    )}
+
+    {suivant && (
+      <nav aria-label="Projet suivant" class="mt-20 flex justify-end">
+        <a href={`/projets/${suivant.slug}`} class={`${carte} block px-8 py-5 no-underline`}>
+          <span class="block font-semibold italic">Projet suivant <span aria-hidden="true">→</span></span>
+          <span class={`${script} mt-1 block text-5xl text-rouge`}>{suivant.titre}</span>
+        </a>
+      </nav>
+    )}
+    <div class="mt-10 flex justify-center"><Bouton href="/projets" couleur="creme">Tous les projets</Bouton></div>
+  </div>
+</BaseLayout>

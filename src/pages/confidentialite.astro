@@ -1,0 +1,52 @@
+---
+import { carte, conteneur, haut, texteRiche, titreEcho } from '../styles/classes.js';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Vague from '../components/Vague.astro';
+import { site } from '../config.js';
+// Politique de confidentialité (RGPD) : ce que devient ce qu'on écrit dans le formulaire de contact.
+// Les éléments entre crochets [ ] sont à compléter par Inès avant la mise en ligne.
+---
+
+<BaseLayout titre="Données personnelles" description="Ce que deviennent les informations envoyées avec le formulaire de contact du portfolio d'Inès Sittler.">
+  <section class={`${haut}`} aria-labelledby="titre-donnees">
+    <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
+      <h1 id="titre-donnees" class={`${titreEcho} text-[clamp(3.5rem,10vw,7rem)]`}>Données personnelles</h1>
+    </div>
+    <Vague />
+  </section>
+
+  <div class={`${conteneur} pt-14`}>
+    <div class={`${carte} mx-auto max-w-215`}>
+      <div class={`${texteRiche} px-6 py-8 md:px-12 md:py-10`}>
+        <h2>Qui s'occupe de tes données&nbsp;?</h2>
+        <p>{site.nom}, éditrice de ce site, est la seule responsable des informations envoyées avec le formulaire de contact.</p>
+
+        <h2>Ce qui est enregistré</h2>
+        <ul>
+          <li>ton nom ;</li>
+          <li>ton adresse e-mail ;</li>
+          <li>ton message ;</li>
+          <li>la date d'envoi.</li>
+        </ul>
+        <p>Rien d'autre n'est demandé. Comme sur tout site, le serveur garde aussi quelques jours un journal technique des visites (avec l'adresse IP), seulement pour la sécurité.</p>
+
+        <h2>Pourquoi</h2>
+        <p>Uniquement pour te répondre. Tes informations ne sont ni revendues, ni partagées, ni utilisées pour de la publicité ou une lettre d'information.</p>
+
+        <h2>Qui peut les lire</h2>
+        <p>Moi seule. Les messages sont rangés dans une base de données protégée par un mot de passe ; personne d'autre ne peut les lire depuis le site.</p>
+        <p>Ils sont stockés chez l'hébergeur du site : [nom de l'hébergeur, pays des serveurs].</p>
+
+        <h2>Combien de temps</h2>
+        <p>Les messages sont gardés [12 mois] après notre dernier échange, puis supprimés.</p>
+
+        <h2>Tes droits</h2>
+        <p>Tu peux à tout moment demander à voir, corriger ou supprimer tes informations, ou t'opposer à leur utilisation. Il suffit de me l'écrire avec le <a href="/contact">formulaire de contact</a> : je réponds sous un mois au plus tard.</p>
+        <p>Si tu penses que tes droits ne sont pas respectés, tu peux adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
+
+        <h2>Cookies</h2>
+        <p>Ce site ne dépose aucun cookie de suivi et n'utilise aucun outil de mesure d'audience. Si une page de projet contient une vidéo, elle est intégrée en mode « sans cookie » (YouTube nocookie ou Vimeo avec l'option « ne pas suivre »).</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

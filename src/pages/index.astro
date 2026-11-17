@@ -1,17 +1,172 @@
 ---
+import { carte, carteBandeau, carteBrune, conteneur, haut, lead, leadHaut, lienHaut, perso, script, titreEcho, titreEchoClair, titreSection } from '../styles/classes.js';
+import { Image } from 'astro:assets';
+// Autoportrait : Astro le convertit en WebP et en plusieurs tailles (plus léger à charger)
+import autoportrait from '../assets/autoportrait.png';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Bouton from '../components/Bouton.astro';
+import Vague from '../components/Vague.astro';
+import Trame from '../components/Trame.astro';
+import FormeLave from '../components/FormeLave.astro';
+import CarteProjet from '../components/CarteProjet.astro';
+import Carrousel from '../components/Carrousel.astro';
+import Competence from '../components/Competence.astro';
+import Qualites from '../components/Qualites.astro';
+import { getProjets, getCompetences, getQualites } from '../lib/pocketbase.js';
+import { site } from '../config.js';
 
+const projets = await getProjets();
+// Hard skills : toutes les compétences de PocketBase à la suite (sans les catégories)
+const outils = (await getCompetences()).flatMap((g) => g.items);
+// Soft skills : mes qualités, lues dans PocketBase
+const qualites = await getQualites();
+
+// Ce que fait Inès. Les classes de couleur sont écrites en entier pour que Tailwind les trouve.
+// Titres en grand : crème sur rouge et vert, brun sur moutarde.
+const savoirFaire = [
+  { titre: 'Dessin de personnages', texte: 'Je dessine surtout des personnages, en traditionnel comme sur tablette.', couleurs: 'bg-rouge text-creme' },
+  { titre: 'Développement web', texte: 'HTML, CSS, JavaScript, Astro, Tailwind et WordPress, puis la mise en ligne.', couleurs: 'bg-moutarde text-brun' },
+  { titre: 'Vidéo et montage', texte: 'Le montage avec DaVinci Resolve, comme la partie vidéo du site Olyvia.', couleurs: 'bg-vert text-creme' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <!-- Héros : qui je suis et ce que je cherche, visible sans défiler -->
+  <section class={`${haut}`} aria-labelledby="titre-accueil">
+    <FormeLave forme="goutte" couleur="rouge" class="absolute -left-20 top-28 w-36 md:w-60" />
+    <FormeLave forme="galet" couleur="orange" class="absolute left-[44%] top-6 hidden w-28 md:block" />
+    <div class={`${conteneur} relative grid items-center gap-8 pb-10 pt-2 md:grid-cols-[1.15fr_1fr] md:gap-10 md:pb-16 md:pt-6`}>
+      <div class="order-2 md:order-1">
+        <h1 id="titre-accueil" class={`${titreEcho} text-titre`}>
+          <span class="block">Inès</span>
+          <span class={`${titreEchoClair} block pl-[0.6em]`}>Sittler</span>
+        </h1>
+        <p class={`${leadHaut} mt-6 max-w-[34ch]`}>
+          Étudiante en création numérique à Montbéliard. Je dessine surtout des personnages, et plus tard je veux faire de l'animation, en 2D comme en 3D.
+        </p>
+        <!-- Le message clé : ce que je cherche, dans une petite carte crème -->
+        <p class="mt-6 inline-block rounded-[14px] border-3 border-brun bg-creme px-5 py-3 font-semibold text-brun shadow-bouton">{site.recherche}</p>
+        <div class="mt-8 flex flex-wrap items-center gap-4">
+          <Bouton href="#projets">Voir mes projets</Bouton>
+          <Bouton href="/contact" couleur="creme">M'écrire</Bouton>
+          {site.cv && <Bouton href={site.cv} couleur="creme">Mon CV</Bouton>}
+          <a href={site.behance} target="_blank" rel="noopener" class={`${lienHaut} ml-2`}>Behance</a>
+          <a href={site.linkedin} target="_blank" rel="noopener" class={`${lienHaut}`}>LinkedIn</a>
+        </div>
+      </div>
+      <div class="relative order-1 mx-auto w-full max-w-125 md:order-2">
+        <FormeLave forme="ronde" couleur="moutarde" class="absolute inset-x-[4%] top-0 h-full w-[92%]" />
+        <FormeLave forme="galet" couleur="rouge" class="absolute -bottom-4 -right-2 w-[36%]" />
+        <Image src={autoportrait} alt="Autoportrait dessiné d'Inès : une fille aux cheveux bruns avec une frange" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" class={`${perso} relative mx-auto w-[92%] pt-[8%]`} loading="eager" fetchpriority="high" />
+      </div>
+    </div>
+    <Vague />
+  </section>
+
+  <!-- Projets : carrousel de cartes, lues dans PocketBase -->
+  <section id="projets" class="relative pt-16 md:pt-24" aria-labelledby="titre-projets">
+    <FormeLave forme="large" couleur="rouge" class="absolute -left-40 top-6 w-64 md:w-96" />
+    <div class={`${conteneur} relative`}>
+      <h2 id="titre-projets" class={`${titreSection} text-moutarde`}>Ce que j'ai créé</h2>
+      <div class="mt-8">
+        {projets.length > 0 ? (
+          <Carrousel titre="Ce que j'ai créé" nombre={projets.length}>
+            {projets.map((p) => <li><CarteProjet projet={p} /></li>)}
+          </Carrousel>
+        ) : (
+          <p class="italic">Aucun projet à afficher pour le moment.</p>
+        )}
+      </div>
+      <div class="mt-10"><Bouton href="/projets">Voir tous les projets <span aria-hidden="true">&nbsp;→</span></Bouton></div>
+    </div>
+  </section>
+
+  <!-- Savoir-faire : un grand bloc orange, qui arrive et repart avec une trame de points -->
+  <section class="relative mt-24 overflow-hidden bg-orange text-brun" aria-labelledby="titre-savoir-faire">
+    <Trame id="trame-entree" sens="descend" />
+    <FormeLave forme="haute" couleur="rouge" class="absolute -right-32 top-48 w-64 md:w-96" />
+    <FormeLave forme="galet" couleur="moutarde" class="absolute -left-16 bottom-40 w-40 md:w-56" />
+    <div class={`${conteneur} relative py-12 md:py-20`}>
+      <h2 id="titre-savoir-faire" class={`${titreSection} text-brun`}>Ce que j'apporte à une équipe</h2>
+      <!-- Une carte par savoir-faire : grand titre coloré en haut, texte en dessous -->
+      <ul class="mt-10 grid gap-10 md:mt-14 lg:grid-cols-3">
+        {savoirFaire.map((s) => (
+          <li class={`${carteBrune} flex flex-col`}>
+            <h3 class={`${script} flex min-h-36 items-end border-b-4 border-brun px-7 py-6 text-carte ${s.couleurs}`}>{s.titre}</h3>
+            <p class="p-7 text-[1.3rem] leading-normal">{s.texte}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <Trame id="trame-sortie" sens="monte" />
+  </section>
+
+  <!-- Qui suis-je : un extrait de la page À propos (mes propres textes) et l'essentiel en bref -->
+  <section class="relative pt-24" aria-labelledby="titre-qui">
+    <FormeLave forme="goutte" couleur="vert" class="absolute -right-24 top-16 w-48 md:w-72" />
+    <div class={`${conteneur} relative`}>
+      <h2 id="titre-qui" class={`${titreSection} text-moutarde`}>Un peu de moi</h2>
+      <div class="mt-10 grid items-start gap-10 lg:grid-cols-[1.5fr_1fr]">
+        <div class={`${carte}`}>
+          <p class={`${carteBandeau} bg-rouge text-creme`}>À propos</p>
+          <div class="flex flex-col gap-4 px-6 py-6 md:px-8">
+            <p>Je m'appelle Inès Sittler, je suis en 2e année de BUT Métiers du Multimédia et de l'Internet à Montbéliard, dans le parcours Création numérique. Je l'ai choisi parce que c'est la création qui me plaît le plus.</p>
+            <p>En dehors du dessin, j'aime le cinéma, surtout les dramas. Côté lecture, je suis très fantastique et historique ; et si je ne devais citer qu'un livre, ce serait un classique : <cite>Orgueil et Préjugés</cite> de Jane Austen.</p>
+            <div class="mt-2"><Bouton href="/a-propos" couleur="moutarde">En savoir plus sur moi</Bouton></div>
+          </div>
+        </div>
+        <div class={`${carte}`}>
+          <p class={`${carteBandeau} bg-orange text-brun`}>En bref</p>
+          <!-- Une ligne par information, séparées par un trait léger, intitulé en gras -->
+          <dl class="px-6 py-5 md:px-8 [&_dt]:font-bold [&>div]:border-b-2 [&>div]:border-brun/15 [&>div]:py-3 [&>div:last-child]:border-b-0">
+            <div><dt>Études</dt><dd>BUT MMI, 2e année, parcours Création numérique</dd></div>
+            <div><dt>Ville</dt><dd>Montbéliard</dd></div>
+            <div><dt>Avant</dt><dd>Bac STMG (2025), lycée Koeberlé à Sélestat</dd></div>
+            <div><dt>Je cherche</dt><dd>Un stage dans un studio d'animation ou de jeu vidéo</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compétences, sur un fond vert uni : hard skills (mes outils, avec leurs logos) et soft skills (mes qualités).
+       Titre crème (en grand, donc lisible), ombre des cartes en brun -->
+  {(outils.length > 0 || qualites.length > 0) && (
+    <section class="mt-24 bg-vert" aria-labelledby="titre-skills">
+      <div class={`${conteneur} py-16 md:py-24`}>
+        <h2 id="titre-skills" class={`${titreSection} text-creme`}>Ma boîte à outils</h2>
+        <div class="mt-10 grid items-start gap-10 lg:grid-cols-[1.6fr_1fr]">
+          {outils.length > 0 && (
+            <div class={carteBrune}>
+              <h3 class={`${carteBandeau} bg-rouge text-creme`}>Hard skills</h3>
+              <ul class="grid grid-cols-2 gap-3 p-5 sm:grid-cols-4 xl:grid-cols-5">
+                {outils.map((c) => <li><Competence {...c} /></li>)}
+              </ul>
+            </div>
+          )}
+          {qualites.length > 0 && (
+            <div class={carteBrune}>
+              <h3 class={`${carteBandeau} bg-orange text-brun`}>Soft skills</h3>
+              <div class="p-6"><Qualites qualites={qualites} /></div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Contact : on renvoie vers le formulaire (pas d'adresse e-mail affichée) -->
+  <section class="pt-24" aria-labelledby="titre-contact">
+    <div class={`${conteneur}`}>
+      <div class={`${carte} mx-auto max-w-205 text-center`}>
+        <p class={`${carteBandeau} bg-vert text-creme`}>Contact</p>
+        <div class="px-6 py-10 md:px-16">
+          <h2 id="titre-contact" class={`${script} text-[clamp(3rem,7vw,5rem)] text-rouge`}>Un projet, une question&nbsp;?</h2>
+          <p class={`${lead} mx-auto mt-4 max-w-[46ch]`}>Une question, un mot sur mon travail ou simplement l'envie d'échanger : écris-moi, je réponds rapidement.</p>
+          <div class="mt-8"><Bouton href="/contact" couleur="rouge">M'écrire</Bouton></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+

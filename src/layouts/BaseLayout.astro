@@ -1,0 +1,65 @@
+---
+// Squelette commun à toutes les pages : polices, styles, référencement, en-tête et pied de page.
+import '@fontsource/yellowtail';
+import '@fontsource/gelasio/400.css';
+import '@fontsource/gelasio/400-italic.css';
+import '@fontsource/gelasio/600.css';
+import '@fontsource/gelasio/700.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config.js';
+// Adresse du fichier de la police des titres, pour la précharger (le grand titre s'affiche plus vite)
+import policeTitres from '@fontsource/yellowtail/files/yellowtail-latin-400-normal.woff2?url';
+
+const {
+  titre,
+  description = `Portfolio d'${site.nom}, étudiante en BUT MMI à Montbéliard : dessin de personnages, sites web et vidéo. ${site.recherche}`,
+  image = '/images/autoportrait.png',
+} = Astro.props;
+const titrePage = titre ? `${titre} · ${site.nom}` : `${site.nom} · Portfolio`;
+const urlPage = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<!-- scroll-smooth : défilement doux vers les ancres (coupé si on a demandé moins d'animations) -->
+<html lang="fr" class="overflow-x-clip scroll-smooth motion-reduce:scroll-auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titrePage}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={urlPage} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href={policeTitres} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#6F7D3C" />
+    <!-- Aperçu lors d'un partage (LinkedIn, messageries…) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={titrePage} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={urlPage} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+  </head>
+  <!-- La page fait au moins la hauteur de l'écran : le pied de page reste en bas, même sur une page courte -->
+  <body class="flex min-h-screen flex-col overflow-x-clip bg-brun font-texte text-lg/relaxed text-creme">
+    <!-- Lien caché qui apparaît au clavier (touche Tab) pour sauter directement au contenu -->
+    <a href="#contenu" class="absolute -top-24 left-3 z-60 rounded-xl border-3 border-brun bg-creme px-4 py-2.5 font-semibold text-brun focus:top-3">Aller au contenu</a>
+    <Header />
+    <main id="contenu" class="flex-1"><slot /></main>
+    <Footer />
+    <script>
+      // Formes de lave : leur animation SVG n'est pas coupée par le CSS de global.css, on la gère ici.
+      const formes = document.querySelectorAll('svg[data-lave]');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // La personne a demandé moins d'animations dans son système : on arrête tout
+        formes.forEach((svg) => svg.pauseAnimations());
+      } else {
+        // Une forme ne bouge que lorsqu'elle est visible à l'écran (moins de travail pour le téléphone)
+        const observateur = new IntersectionObserver((entrees) => {
+          entrees.forEach((e) => (e.isIntersecting ? e.target.unpauseAnimations() : e.target.pauseAnimations()));
+        });
+        formes.forEach((svg) => observateur.observe(svg));
+      }
+    </script>
+  </body>
+</html>

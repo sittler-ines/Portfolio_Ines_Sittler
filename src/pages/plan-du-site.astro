@@ -1,0 +1,40 @@
+---
+import { carte, conteneur, haut, texteRiche, titreEcho } from '../styles/classes.js';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Vague from '../components/Vague.astro';
+import { getProjets } from '../lib/pocketbase.js';
+
+// Toutes les pages du site, avec la liste des projets lue dans PocketBase.
+const projets = await getProjets();
+---
+
+<BaseLayout titre="Plan du site" description="Toutes les pages du portfolio d'Inès Sittler.">
+  <section class={`${haut}`} aria-labelledby="titre-plan">
+    <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
+      <h1 id="titre-plan" class={`${titreEcho} text-[clamp(3.5rem,10vw,7rem)]`}>Plan du site</h1>
+    </div>
+    <Vague />
+  </section>
+
+  <div class={`${conteneur} pt-14`}>
+    <div class={`${carte} mx-auto max-w-215`}>
+      <div class={`${texteRiche} px-6 py-8 md:px-12 md:py-10`}>
+        <ul>
+          <li><a href="/">Accueil</a></li>
+          <li>
+            <a href="/projets">Projets</a>
+            {projets.length > 0 && (
+              <ul>
+                {projets.map((p) => <li><a href={`/projets/${p.slug}`}>{p.titre}</a></li>)}
+              </ul>
+            )}
+          </li>
+          <li><a href="/a-propos">À propos</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/mentions-legales">Mentions légales</a></li>
+          <li><a href="/confidentialite">Données personnelles</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
