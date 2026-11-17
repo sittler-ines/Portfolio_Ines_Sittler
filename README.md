@@ -1,43 +1,36 @@
-# Astro Starter Kit: Minimal
+# Portfolio d'Inès Sittler
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Portfolio d'étudiante en BUT MMI (2e année, Montbéliard), direction artistique vintage années 70.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Technologies
 
-## 🚀 Project Structure
+| Outil | Pourquoi |
+|---|---|
+| **Astro** (rendu serveur, adaptateur Node) | Pages rapides, composants réutilisables, presque pas de JavaScript envoyé au navigateur. |
+| **Tailwind CSS** | Tout le style est écrit en classes Tailwind dans les fichiers `.astro`. La direction artistique (palette, polices, tailles, ombres rétro, animation) est déclarée une seule fois dans `@theme` (`src/styles/global.css`) ; les suites de classes qui reviennent souvent sont rangées dans `src/styles/classes.js`. |
+| **PocketBase** | Base de données et tableau de bord : j'ajoute et modifie mes projets, compétences et lis les messages sans toucher au code. |
+| **JavaScript** (sans bibliothèque) | Menu mobile et carrousel des projets (`src/scripts/`). |
+| Polices **Yellowtail** et **Gelasio** (@fontsource) | Servies par le site lui-même, sans Google Fonts. |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Lancer le site en local
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+1. `npm install` (une seule fois)
+2. Dans un premier terminal : `npm run db` (PocketBase sur http://127.0.0.1:8090, tableau de bord : http://127.0.0.1:8090/_/)
+3. Dans un second terminal : `npm run dev` (le site sur http://localhost:4330)
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Première fois : créer le compte administrateur de PocketBase :
+`pocketbase\pocketbase.exe superuser upsert mon@email.fr MonMotDePasse --dir pocketbase/pb_data`
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Le programme `pocketbase.exe` se télécharge sur https://pocketbase.io (il n'est pas dans le dépôt).
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Organisation
 
-## 🧞 Commands
+- `src/pages/` : les pages (accueil, projets, projet, à propos, contact, mentions légales, données personnelles, plan du site, 404)
+- `src/components/` : en-tête, pied de page, bouton, carte de projet, carrousel, vague, formes de lave
+- `src/lib/pocketbase.js` : lecture des projets et compétences, envoi des messages
+- `pocketbase/pb_migrations/` : création des collections et du contenu de départ
 
-All commands are run from the root of the project, from a terminal:
+## Contenu dans PocketBase
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Collection **projects** : titre, slug, type (pro/perso), résumé, « ce que j'ai fait », équipe, outils, et les 5 parties de l'étude de cas (contexte, mon rôle, processus, choix techniques, résultat), capture, galerie, lien, vidéo, ordre.
+Collection **skills** : compétences par catégorie, avec le lien vers le site de l'outil et un logo facultatif (sinon le logo de `src/logos/` du même nom). Collection **qualities** : mes qualités (soft skills), sur l'accueil et la page À propos. Collection **messages** : messages du formulaire (lisibles seulement par l'administratrice).
