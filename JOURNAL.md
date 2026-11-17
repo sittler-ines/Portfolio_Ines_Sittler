@@ -1,36 +1,36 @@
 # Journal de bord
 
-> Brouillon rédigé à partir de l'historique réel du projet (séances de travail, maquettes Figma, retours des profs).
-> À relire et à compléter : les semaines marquées [à compléter] sont celles dont je n'ai pas gardé de trace.
+> Brouillon rédigé à partir de l'historique réel du projet (séances de travail, maquettes Figma, retours des enseignants).
+> À relire et à compléter : les semaines marquées [à compléter] n'ont pas laissé de trace écrite.
 
 ## Semaine du 28 septembre 2026
-- Premier portfolio dans une direction artistique victorienne et vintage, à partir de mon moodboard.
-- Plusieurs essais refusés parce qu'ils faisaient « trop IA » : étiquettes en capitales « N° 01 », animations lettre par lettre, motifs de tartan, fonds trop chargés.
-- Choix de deux polices seulement (Gabriela et Libre Baskerville), du thème clair, et maquettes desktop et mobile dans Figma.
-- Je veux pouvoir refaire chaque proposition moi-même dans Figma : idées simples (mise en page, typo, couleurs), pas d'effets compliqués.
+- Premier portfolio dans une direction artistique victorienne, à partir de mon moodboard.
+- Plusieurs pistes écartées car trop génériques : étiquettes numérotées, animations de titres, motifs chargés.
+- Choix de deux polices et d'un thème clair ; maquettes desktop et mobile dans Figma.
+- Principe retenu : des idées simples (mise en page, typographie, couleurs) que je peux reproduire moi-même dans Figma.
 
 ## Semaine du 5 octobre 2026
-- Suite du site victorien : projets présentés comme des tableaux, compétences en étagères de livres, fenêtre de nuit dans le héros.
-- J'ai écrit mes textes (présentation, parcours, projets) et choisi mes 3 projets : Olyvia, Aegirhall, FlyTapFest.
+- Suite de la version victorienne : projets présentés comme des tableaux, compétences en étagères.
+- Rédaction de mes textes (présentation, parcours, projets) et choix de mes 3 projets : Olyvia, Aegirhall, FlyTapFest.
 - [à compléter : préparation de la soutenance maquette, note de positionnement, prototype]
 
-## Semaines d'octobre et début novembre
-- Soutenance maquette : 9,5/20. Retours : « trop littéral » (cadres, livres) et pas de grille claire. Conseil : partir de mon illustration pour un parti pris graphique plus fort.
-- Moodboard années 70 validé par mon professeur : palette crème, rouge, orange, vert, moutarde, brun.
-- [à compléter : ce que j'ai fait ces semaines-là]
+## Octobre et début novembre 2026
+- Soutenance maquette : 9,5/20. Retours : métaphores trop littérales (cadres, livres) et absence de grille. Piste conseillée : partir de mon illustration pour un parti pris graphique plus affirmé.
+- Moodboard années 70 validé par mon enseignant : palette crème, rouge, orange, vert, moutarde, brun.
+- [à compléter]
 
 ## Semaine du 9 novembre 2026
-- 12 novembre : je repars de zéro. Je garde seulement mon autoportrait dessiné. Cible : studios d'animation 2D/3D et de jeu vidéo.
-- Recherches dans mes références Pinterest et Behance, puis plusieurs pistes comparées (couture, petit théâtre, nuit d'automne). Une première version années 70 est rejetée : trop « Burger King ».
-- 13 au 15 novembre : dans Figma, 4 personnalités pour l'accueil (rêveuse, collectionneuse, pétillante, poétique). Je retiens « La pétillante » et j'en fais une maquette complète.
+- 12 novembre : refonte complète. Je conserve mon autoportrait dessiné. Cible : studios d'animation 2D/3D et de jeu vidéo.
+- Analyse de mes références (Pinterest, Behance) et comparaison de plusieurs pistes graphiques. Une première version années 70 est écartée : la typographie ne correspondait pas à mon positionnement.
+- 13 au 15 novembre : 4 propositions d'accueil dans Figma ; je retiens « La pétillante » et j'en fais une maquette complète.
 
 ## Semaine du 16 novembre 2026
-- Tests années 70 dans Figma : nom droit (c'est un site, pas une affiche), couleurs exactes du moodboard, fond brun, vague sous le héros au lieu d'une bande.
-- Beaucoup d'essais de décors et de polices refusés (Shrikhand, damier, rayons, grain, mise en page magazine). Je garde l'écho rétro sur le nom.
-- Maquette finale : mélange de « Base v2 » et de la version rétro (Yellowtail, cartes rétro, projets en carrousel). Prototype navigable desktop et mobile dans Figma.
-- Je recommence le code de zéro : Astro, Tailwind et PocketBase. Collections projets, compétences, qualités et messages, gérées depuis le tableau de bord.
-- Pages : accueil, projets avec filtres, page projet en étude de cas, à propos, contact (formulaire enregistré dans PocketBase), mentions légales, données personnelles, plan du site.
-- Ajustements : haut des pages en vert, formes de lave qui se déforment, perso animé, logos des outils, favicon « IS » en monogramme, titres moins scolaires après la remarque du jury.
-- Qualité : Lighthouse sur toutes les pages, corrections de contraste et d'images. Résultat : 100 en accessibilité, bonnes pratiques et référencement, 96 à 100 en performance.
-- Tout le style passe en classes Tailwind (plus de CSS écrit à la main), pour que le code soit cohérent avec ma stack.
-- Reste : mise en ligne sur mon domaine, parties « processus », « choix techniques » et « résultat » de mes 3 projets.
+- Tests années 70 dans Figma : nom droit et aligné sur la grille, couleurs exactes du moodboard, fond brun, vague sous le héros.
+- Plusieurs décors et polices testés puis écartés ; je conserve l'effet d'écho rétro sur le nom.
+- Maquette finale : fusion de « Base v2 » et de la version rétro (Yellowtail, cartes rétro, projets en carrousel), prototype navigable desktop et mobile.
+- Développement : Astro, Tailwind et PocketBase. Collections projets, compétences, qualités et messages, gérées depuis le tableau de bord.
+- Pages : accueil, projets avec filtres, études de cas, à propos, contact (formulaire enregistré dans PocketBase), mentions légales, données personnelles, plan du site.
+- Ajustements : haut des pages en vert, formes animées, logos des outils, favicon en monogramme « IS », titres reformulés après la remarque du jury.
+- Qualité : audit Lighthouse de toutes les pages et corrections (contraste, poids des images, chargement). Résultat : 100 en accessibilité, bonnes pratiques et référencement, 96 à 100 en performance.
+- Tout le style est désormais écrit en classes Tailwind, en cohérence avec ma stack.
+- Reste à faire : mise en ligne sur mon domaine, parties « processus », « choix techniques » et « résultat » de mes 3 projets.
