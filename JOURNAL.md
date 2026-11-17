@@ -22,7 +22,7 @@
 - Travail sur la maquette dans Figma, à partir des retours de la soutenance et du nouveau moodboard.
 
 ## Semaine du 2 novembre 2026
-- Début du développement du site.
+- 7 novembre : début du développement du site.
 - Je n'ai pas commité au fur et à mesure : c'est pour ça que l'historique Git est concentré sur la fin du projet. À l'avenir, je committerai à chaque étape.
 
 ## Semaine du 9 novembre 2026
