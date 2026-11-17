@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Configuration de Tailwind : la direction artistique vintage années 70.
+   Chaque valeur déclarée ici devient une classe Tailwind :
+   --color-vert → bg-vert, text-vert… ; --shadow-retro → shadow-retro ; --text-titre → text-titre…
+   Tout le reste du site est écrit avec des classes Tailwind, dans les fichiers .astro.
+   ============================================================ */
+@theme {
+  /* Palette du moodboard validé (6 couleurs, aucune autre) */
+  --color-creme: #F2DFA8;
+  --color-rouge: #C83F3A;
+  --color-orange: #E47B45;
+  --color-vert: #6F7D3C;
+  --color-moutarde: #E2A83B;
+  --color-brun: #35251F;
+
+  /* Polices : écriture rétro pour les titres (Yellowtail), serif chaleureuse pour le texte (Gelasio) */
+  --font-script: 'Yellowtail', cursive;
+  --font-texte: 'Gelasio', Georgia, serif;
+
+  /* Tailles de texte (elles grandissent avec l'écran grâce à clamp) */
+  --text-titre: clamp(4.5rem, 13vw, 10rem);       /* grand titre du haut de page */
+  --text-titre--line-height: 0.95;
+  --text-section: clamp(3.4rem, 8vw, 7rem);       /* titres de section */
+  --text-section--line-height: 1;
+  --text-carte: clamp(2.6rem, 4vw, 3.4rem);       /* titres des cartes */
+  --text-carte--line-height: 1;
+  --text-lead: clamp(1.15rem, 2vw, 1.45rem);      /* texte d'introduction */
+  --text-lead--line-height: 1.5;
+  --text-lead-haut: clamp(1.5rem, 2.2vw, 1.75rem); /* texte d'intro sur le vert : plus grand pour rester lisible */
+  --text-lead-haut--line-height: 1.5;
+
+  /* Ombres rétro décalées, sans flou */
+  --shadow-retro: 10px 10px 0 var(--color-moutarde);
+  --shadow-retro-survol: 13px 13px 0 var(--color-moutarde);
+  --shadow-retro-brun: 10px 10px 0 var(--color-brun);
+  --shadow-bouton: 5px 5px 0 var(--color-brun);
+  --shadow-bouton-survol: 3px 3px 0 var(--color-brun);
+  --shadow-petite: 4px 4px 0 var(--color-brun);
+  --shadow-mini: 2px 2px 0 var(--color-brun);
+  --shadow-fleche: 5px 5px 0 var(--color-moutarde);
+  --shadow-fleche-creme: 5px 5px 0 var(--color-creme);
+
+  /* L'écho rétro des grands titres : deux ombres décalées */
+  --text-shadow-echo: 0.04em 0.04em 0 var(--color-moutarde), 0.08em 0.08em 0 var(--color-rouge);
+  --text-shadow-echo-clair: 0.04em 0.04em 0 var(--color-rouge), 0.08em 0.08em 0 var(--color-brun);
+  --text-shadow-menu: 0.05em 0.05em 0 var(--color-brun);
+
+  /* Coins arrondis des cartes */
+  --radius-carte: 26px;
+
+  /* Animation : mon personnage flotte doucement, comme s'il respirait (classe animate-perso) */
+  --animate-perso: perso 6s ease-in-out infinite;
+  @keyframes perso {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    30%      { transform: translateY(-12px) rotate(-1.5deg); }
+    65%      { transform: translateY(-4px) rotate(1.2deg); }
+  }
+}
+
+/* Réglages de base valables pour tout le site (couche « base » de Tailwind) */
+@layer base {
+  /* Contour de focus bien visible pour la navigation au clavier */
+  :focus-visible {
+    outline: 3px solid var(--color-moutarde);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  /* Si la personne a demandé moins d'animations dans son système, on les coupe toutes */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+}

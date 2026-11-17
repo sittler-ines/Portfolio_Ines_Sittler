@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# PocketBase : le programme et la base locale ne vont pas sur GitHub
+# (seules les migrations sont suivies)
+pocketbase/pocketbase.exe
+pocketbase/pb_data/
