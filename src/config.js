@@ -4,7 +4,7 @@
 export const site = {
   nom: 'Inès Sittler',
   role: 'Étudiante en création numérique',
-  recherche: "Je cherche un stage dans un studio d'animation ou de jeu vidéo.",
+  recherche: "En recherche d'un stage en création visuelle, du 29 mars au 4 juin 2027.",
   behance: 'https://www.behance.net/inssittler',
   linkedin: 'https://www.linkedin.com/in/in%C3%A8s-sittler-12148b398/',
   cv: null,

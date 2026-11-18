@@ -34,12 +34,12 @@
 
 | Critère | Ce qui est fait | Comment vérifier | Résultat |
 |---|---|---|---|
-| Mentions légales et données personnelles | Page `/mentions-legales` : éditrice, hébergeur, propriété intellectuelle, données personnelles du formulaire (durée, droits, CNIL), cookies, crédits. Liée dans le pied de page et sous le formulaire de contact. **À compléter : hébergeur ; vérifier la durée de conservation (12 mois).** | Lecture | |
+| Mentions légales et données personnelles | Page `/mentions-legales` : éditrice, hébergeur, propriété intellectuelle, données personnelles du formulaire (durée, droits, CNIL), cookies, crédits. Liée dans le pied de page et sous le formulaire de contact. Hébergement : VPS privé ; nom de domaine chez Infomaniak ; messages gardés 12 mois. | Lecture | |
 | Données du formulaire | Information sous le formulaire ; messages lisibles seulement par l'administratrice (règles PocketBase). | Tenter de lire `/api/collections/messages/records` sans être connectée | |
 | Sécurité du formulaire | Vérification côté serveur, champ piège anti-robot, vérification de l'origine dans contact.astro (envoi refusé s'il vient d'un autre site ; la vérification automatique d'Astro bloquait le formulaire derrière le serveur du VPS). | Test | |
 | Cookies | Aucun cookie de suivi, aucune mesure d'audience. | Onglet Application | |
 | Vidéos intégrées | YouTube en mode « nocookie », Vimeo avec `dnt=1`. | Code | |
-| Licences | Polices sous licence SIL OFL, créditées ; projet d'équipe signalé (Olyvia). | Lecture | |
+| Licences | Polices sous licence SIL OFL, créditées ; projets d'équipe signalés dans les mentions légales. | Lecture | |
 
 ## Résultats Lighthouse (en local, version de production, 17/11/2026)
 

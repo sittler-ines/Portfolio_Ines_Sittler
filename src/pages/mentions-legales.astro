@@ -1,17 +1,17 @@
 ---
-import { carte, conteneur, haut, texteRiche, titreEcho } from '../styles/classes.js';
+import { carte, conteneur, haut, leadHaut, texteRiche, titreEcho } from '../styles/classes.js';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Vague from '../components/Vague.astro';
 import { site } from '../config.js';
 // Mentions obligatoires pour un site personnel (loi pour la confiance dans l'économie numérique, LCEN)
 // et informations sur les données personnelles du formulaire de contact (RGPD).
-// Les éléments entre crochets [ ] sont à compléter par Inès avant la mise en ligne.
 ---
 
 <BaseLayout titre="Mentions légales" description="Mentions légales du portfolio d'Inès Sittler : éditrice, hébergement, propriété intellectuelle, données personnelles et crédits.">
-  <section class={`${haut}`} aria-labelledby="titre-mentions">
+  <section class={haut} aria-labelledby="titre-mentions">
     <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
       <h1 id="titre-mentions" class={`${titreEcho} text-[clamp(3.5rem,10vw,7rem)]`}>Mentions légales</h1>
+      <p class={`${leadHaut} mt-4 max-w-[48ch]`}>Qui édite et héberge ce site, à qui appartient ce qu'il montre, et ce que je fais de vos données.</p>
     </div>
     <Vague />
   </section>
@@ -19,47 +19,46 @@ import { site } from '../config.js';
   <div class={`${conteneur} pt-14`}>
     <div class={`${carte} mx-auto max-w-215`}>
       <div class={`${texteRiche} px-6 py-8 md:px-12 md:py-10`}>
+        <p class="italic">Dernière mise à jour : novembre 2026.</p>
+
         <h2>Éditrice du site</h2>
-        <p>Ce site est le portfolio personnel et non commercial d'{site.nom}, étudiante en BUT Métiers du Multimédia et de l'Internet à Montbéliard.</p>
-        <p>Directrice de la publication : {site.nom}.</p>
-        <p>Pour me contacter : le <a href="/contact">formulaire de contact</a>.</p>
+        <p>Ce site est le portfolio personnel et non commercial d'{site.nom}, étudiante en BUT Métiers du Multimédia et de l'Internet à l'IUT de Montbéliard. Il présente mes projets et mes compétences ; il ne vend rien.</p>
+        <p>Contact : par le <a href="/contact">formulaire de contact</a>.</p>
 
         <h2>Hébergement</h2>
-        <p>Le site et sa base de données sont hébergés par : [nom de l'hébergeur], [adresse de l'hébergeur], [numéro de téléphone ou site web de l'hébergeur].</p>
+        <p>Le site et sa base de données sont hébergés sur un serveur privé virtuel (VPS).</p>
+        <p>Le nom de domaine est enregistré auprès d'Infomaniak Network SA, rue Eugène-Marziano 25, 1227 Les Acacias (Genève), Suisse — <a href="https://www.infomaniak.com" target="_blank" rel="noopener">infomaniak.com</a>.</p>
 
         <h2>Propriété intellectuelle</h2>
-        <p>Les dessins, illustrations, textes et visuels de ce site appartiennent à {site.nom}, sauf mention contraire. Toute reproduction, même partielle, sans mon autorisation est interdite.</p>
-        <p>Les projets réalisés en équipe (Olyvia) appartiennent à toute l'équipe. Les captures des sites présentés montrent des projets réalisés pendant ma formation.</p>
-
-        <h2>Liens vers d'autres sites</h2>
-        <p>Ce site contient des liens vers Behance, LinkedIn et les sites de mes projets. Je ne suis pas responsable du contenu de ces sites.</p>
+        <p>Les dessins, illustrations, textes, visuels et le logo de ce site appartiennent à {site.nom}, sauf mention contraire. Toute reproduction ou réutilisation, même partielle, demande mon accord préalable.</p>
+        <p>Les projets réalisés en équipe appartiennent à l'ensemble de leurs membres : la page de chaque projet précise le contexte et ma part du travail. Les logos des logiciels présentés appartiennent à leurs propriétaires respectifs.</p>
 
         <h2 id="donnees-personnelles">Données personnelles</h2>
-        <p>{site.nom}, éditrice de ce site, est la seule responsable des informations envoyées avec le formulaire de contact.</p>
+        <p>{site.nom} est la seule responsable des informations envoyées avec le formulaire de contact.</p>
         <h3>Ce qui est enregistré</h3>
-        <ul>
-          <li>ton nom ;</li>
-          <li>ton adresse e-mail ;</li>
-          <li>ton message ;</li>
-          <li>la date d'envoi.</li>
-        </ul>
-        <p>Rien d'autre n'est demandé. Comme sur tout site, le serveur garde aussi quelques jours un journal technique des visites (avec l'adresse IP), seulement pour la sécurité.</p>
-        <h3>Pourquoi</h3>
-        <p>Uniquement pour te répondre. Tes informations ne sont ni revendues, ni partagées, ni utilisées pour de la publicité ou une lettre d'information.</p>
-        <h3>Qui peut les lire</h3>
-        <p>Moi seule. Les messages sont rangés dans une base de données protégée par un mot de passe ; personne d'autre ne peut les lire depuis le site. Ils sont stockés chez l'hébergeur du site : [nom de l'hébergeur, pays des serveurs].</p>
+        <p>Votre nom, votre adresse e-mail, votre message et la date d'envoi. Rien d'autre n'est demandé.</p>
+        <h3>Où et pourquoi</h3>
+        <p>Les messages sont enregistrés dans la base de données du site, sur le serveur privé qui l'héberge, et une copie m'est envoyée par e-mail. Ils servent uniquement à vous répondre, sur la base de mon intérêt légitime à traiter les prises de contact. Ils ne sont ni revendus, ni transmis à des tiers, ni utilisés pour de la publicité.</p>
+        <p>Comme sur tout site, le serveur garde aussi quelques jours un journal technique des connexions (avec l'adresse IP), seulement pour son bon fonctionnement et sa sécurité.</p>
         <h3>Combien de temps</h3>
-        <p>Les messages sont gardés [12 mois] après notre dernier échange, puis supprimés.</p>
-        <h3>Tes droits</h3>
-        <p>Tu peux à tout moment demander à voir, corriger ou supprimer tes informations, ou t'opposer à leur utilisation. Il suffit de me l'écrire avec le <a href="/contact">formulaire de contact</a> : je réponds sous un mois au plus tard.</p>
-        <p>Si tu penses que tes droits ne sont pas respectés, tu peux adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
+        <p>Les messages sont conservés au maximum 12 mois après notre dernier échange, puis supprimés.</p>
+        <h3>Vos droits</h3>
+        <p>Vous pouvez demander à consulter, corriger ou supprimer vos informations, ou vous opposer à leur utilisation, en me l'écrivant avec le <a href="/contact">formulaire de contact</a>. Je réponds sous un mois au plus tard.</p>
+        <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
 
         <h2>Cookies</h2>
-        <p>Ce site ne dépose aucun cookie de suivi et n'utilise aucun outil de mesure d'audience. Si une page de projet contient une vidéo, elle est intégrée en mode « sans cookie » (YouTube nocookie ou Vimeo avec l'option « ne pas suivre »).</p>
+        <p>Ce site ne dépose aucun cookie et n'utilise ni publicité ni outil de mesure d'audience. Si une page de projet contient une vidéo, elle est intégrée en mode « sans cookie » (YouTube nocookie ou Vimeo avec l'option « ne pas suivre »).</p>
+
+        <h2>Responsabilité</h2>
+        <p>Les informations de ce site sont données à titre indicatif et peuvent évoluer. Les liens vers d'autres sites (Behance, LinkedIn, sites des projets) mènent vers des contenus que je ne contrôle pas.</p>
+
+        <h2>Signaler un contenu</h2>
+        <p>Pour signaler une erreur, un contenu qui vous appartient ou qui vous pose problème, écrivez-moi avec le <a href="/contact">formulaire de contact</a> : je vous réponds et je le retire si nécessaire.</p>
 
         <h2>Crédits</h2>
-        <p>Polices : Yellowtail (Astigmatic) et Gelasio (Eben Sorkin), sous licence SIL Open Font License. Site conçu et réalisé par {site.nom} avec Astro, Tailwind CSS et PocketBase.</p>
-        <p>Logos des outils : Simple Icons (licence CC0), svgl pour Affinity, Codicons de Microsoft (licence CC BY 4.0) pour VS Code, et le logo de Procreate tiré de son site officiel. Les marques et logos appartiennent à leurs propriétaires respectifs.</p>
+        <p>Conception, illustrations et développement : {site.nom}. Site réalisé avec Astro, Tailwind CSS et PocketBase.</p>
+        <p>Polices : Yellowtail (Astigmatic) et Gelasio (Eben Sorkin), sous licence SIL Open Font License, servies par le site lui-même.</p>
+        <p>Logos des outils : Simple Icons (licence CC0), svgl pour Affinity, Codicons de Microsoft (licence CC BY 4.0) pour VS Code, et le logo de Procreate tiré de son site officiel.</p>
       </div>
     </div>
   </div>

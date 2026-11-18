@@ -38,8 +38,9 @@ export const champ = 'min-h-13 w-full rounded-[14px] border-3 border-brun bg-[#f
 // Texte écrit dans PocketBase (ou les pages légales) : on met en forme les balises qu'il contient
 export const texteRiche = [
   '[&>*]:mt-[0.9em] [&>*:first-child]:mt-0',
-  '[&_h2]:mt-[1.4em] [&_h2]:text-[1.3rem] [&_h2]:font-semibold',
-  '[&_h3]:mt-[1.4em] [&_h3]:text-[1.3rem] [&_h3]:font-semibold',
+  // Titres plus grands (h2, avec un trait au-dessus pour séparer les parties) et sous-titres plus petits (h3)
+  '[&_h2]:mt-[1.8em] [&_h2]:border-t-2 [&_h2]:border-brun/15 [&_h2]:pt-[1.2em] [&_h2]:text-[1.6rem] [&_h2]:font-bold',
+  '[&_h3]:mt-[1.2em] [&_h3]:text-[1.15rem] [&_h3]:font-semibold [&_h3]:italic',
   '[&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-3',
   '[&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5',
   '[&_img]:rounded-xl [&_img]:border-3 [&_img]:border-brun',
