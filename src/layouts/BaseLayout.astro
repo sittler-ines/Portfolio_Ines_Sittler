@@ -16,6 +16,8 @@ const {
   titre,
   description = `Portfolio d'${site.nom}, étudiante en BUT MMI à Montbéliard : dessin de personnages, sites web et vidéo. ${site.recherche}`,
   image = '/images/autoportrait.png',
+  // Page sans fond brun (ex. la 404) : le fond de page est moutarde et le pied de page arrive sans vague
+  sansBrun = false,
 } = Astro.props;
 const titrePage = titre ? `${titre} · ${site.nom}` : `${site.nom} · Portfolio`;
 const urlPage = new URL(Astro.url.pathname, Astro.site);
@@ -41,25 +43,11 @@ const urlPage = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:image" content={new URL(image, Astro.site)} />
   </head>
   <!-- La page fait au moins la hauteur de l'écran : le pied de page reste en bas, même sur une page courte -->
-  <body class="flex min-h-screen flex-col overflow-x-clip bg-brun font-texte text-lg/relaxed text-creme">
+  <body class:list={['flex min-h-screen flex-col overflow-x-clip font-texte text-lg/relaxed text-creme', sansBrun ? 'bg-moutarde' : 'bg-brun']}>
     <!-- Lien caché qui apparaît au clavier (touche Tab) pour sauter directement au contenu -->
     <a href="#contenu" class="absolute -top-24 left-3 z-60 rounded-xl border-3 border-brun bg-creme px-4 py-2.5 font-semibold text-brun focus:top-3">Aller au contenu</a>
     <Header />
     <main id="contenu" class="flex-1"><slot /></main>
-    <Footer />
-    <script>
-      // Formes de lave : leur animation SVG n'est pas coupée par le CSS de global.css, on la gère ici.
-      const formes = document.querySelectorAll('svg[data-lave]');
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        // La personne a demandé moins d'animations dans son système : on arrête tout
-        formes.forEach((svg) => svg.pauseAnimations());
-      } else {
-        // Une forme ne bouge que lorsqu'elle est visible à l'écran (moins de travail pour le téléphone)
-        const observateur = new IntersectionObserver((entrees) => {
-          entrees.forEach((e) => (e.isIntersecting ? e.target.unpauseAnimations() : e.target.pauseAnimations()));
-        });
-        formes.forEach((svg) => observateur.observe(svg));
-      }
-    </script>
+    <Footer vague={!sansBrun} />
   </body>
 </html>

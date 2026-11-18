@@ -50,13 +50,6 @@
   /* Coins arrondis des cartes */
   --radius-carte: 26px;
 
-  /* Animation : mon personnage flotte doucement, comme s'il respirait (classe animate-perso) */
-  --animate-perso: perso 6s ease-in-out infinite;
-  @keyframes perso {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    30%      { transform: translateY(-12px) rotate(-1.5deg); }
-    65%      { transform: translateY(-4px) rotate(1.2deg); }
-  }
 }
 
 /* Réglages de base valables pour tout le site (couche « base » de Tailwind) */

@@ -3,7 +3,7 @@
 // et la page s'affiche quand même (avec un message « aucun projet »).
 import PocketBase from 'pocketbase';
 
-const url = import.meta.env.POCKETBASE_URL || 'http://127.0.0.1:8090';
+const url = import.meta.env.POCKETBASE_URL || 'https://pbportfolio.ines-sittler.fr';
 const pb = new PocketBase(url);
 // Une page peut faire plusieurs requêtes en même temps : on désactive l'annulation automatique.
 pb.autoCancellation(false);

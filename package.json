@@ -6,7 +6,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "db": "pocketbase\\pocketbase.exe serve --dir pocketbase/pb_data --migrationsDir pocketbase/pb_migrations --http 127.0.0.1:8090",
+    "db": "pocketbase\\pocketbase.exe serve --dir pocketbase/pb_data --migrationsDir pocketbase/pb_migrations --hooksDir pocketbase/pb_hooks --http 127.0.0.1:8090",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

@@ -10,7 +10,7 @@
 | Navigation au clavier | Lien « Aller au contenu », contour de focus moutarde, menu mobile qui se ferme avec Échap, flèches du carrousel en vrais boutons. | Parcourir le site avec Tab | |
 | Images | Autoportrait avec texte alternatif ; formes de lave et vague cachées aux lecteurs d'écran. | WAVE | |
 | Formulaire | Étiquettes reliées aux champs, erreurs annoncées (`aria-invalid`, `aria-describedby`, `role="alert"`). | Envoyer le formulaire vide | |
-| Mouvement | Formes de lave qui se déforment sur place (SVG <animate>) et personnage qui flotte (CSS). Tout s'arrête si « réduire les animations » est activé. Animations coupées si « réduire les animations » est activé dans le système. | Réglage du système | |
+| Mouvement | Aucune animation décorative (formes et autoportrait fixes). Seuls les petits effets de survol, coupés si « réduire les animations » est activé. | Réglage du système | |
 
 ## Sobriété et performance
 
@@ -34,9 +34,9 @@
 
 | Critère | Ce qui est fait | Comment vérifier | Résultat |
 |---|---|---|---|
-| Mentions légales et données personnelles | Pages `/mentions-legales` (éditrice, hébergeur, propriété intellectuelle, crédits) et `/confidentialite` (données du formulaire, durée, droits, CNIL, cookies), liées dans le pied de page avec le plan du site. **À compléter : hébergeur ; vérifier la durée de conservation (12 mois).** | Lecture | |
+| Mentions légales et données personnelles | Page `/mentions-legales` : éditrice, hébergeur, propriété intellectuelle, données personnelles du formulaire (durée, droits, CNIL), cookies, crédits. Liée dans le pied de page et sous le formulaire de contact. **À compléter : hébergeur ; vérifier la durée de conservation (12 mois).** | Lecture | |
 | Données du formulaire | Information sous le formulaire ; messages lisibles seulement par l'administratrice (règles PocketBase). | Tenter de lire `/api/collections/messages/records` sans être connectée | |
-| Sécurité du formulaire | Vérification côté serveur, champ piège anti-robot, protection CSRF d'Astro (envoi refusé depuis un autre site). | Test | |
+| Sécurité du formulaire | Vérification côté serveur, champ piège anti-robot, vérification de l'origine dans contact.astro (envoi refusé s'il vient d'un autre site ; la vérification automatique d'Astro bloquait le formulaire derrière le serveur du VPS). | Test | |
 | Cookies | Aucun cookie de suivi, aucune mesure d'audience. | Onglet Application | |
 | Vidéos intégrées | YouTube en mode « nocookie », Vimeo avec `dnt=1`. | Code | |
 | Licences | Polices sous licence SIL OFL, créditées ; projet d'équipe signalé (Olyvia). | Lecture | |
@@ -57,8 +57,6 @@ Scores : performance / accessibilité / bonnes pratiques / référencement.
 | À propos | 99 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
 | Contact | 99 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
 | Mentions légales | 99 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
-| Données personnelles | 99 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
-| Plan du site | 99 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
 
 La page 404 ne peut pas être notée : Lighthouse refuse les pages qui répondent « 404 », ce qui est le comportement voulu.
 
@@ -67,6 +65,5 @@ Corrections faites après le premier passage (accessibilité à 95-96, performan
 - autoportrait converti en WebP et en plusieurs tailles par Astro (`astro:assets`), chargé tout de suite quand il est en haut de page ;
 - captures de projet servies par PocketBase en vignettes de 400, 800 et 1200 px (`srcset`) : le navigateur prend la plus adaptée ;
 - CSS écrit directement dans chaque page (`inlineStylesheets`) et police des titres préchargée : la page s'affiche plus vite ;
-- formes de lave animées seulement quand elles sont visibles à l'écran (`IntersectionObserver`).
 
 Reste à faire en ligne : la compression du texte (gzip) se règle chez l'hébergeur. Les captures restent en JPEG (PocketBase ne les convertit pas en WebP). À refaire sur le site en ligne.

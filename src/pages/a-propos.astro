@@ -1,5 +1,5 @@
 ---
-import { carte, carteBandeau, conteneur, haut, perso, script, titreEcho, titreSection } from '../styles/classes.js';
+import { carte, carteBandeau, conteneur, haut, script, titreEcho, titreSection } from '../styles/classes.js';
 import { Image } from 'astro:assets';
 // Autoportrait : Astro le convertit en WebP et en plusieurs tailles (plus léger à charger)
 import autoportrait from '../assets/autoportrait.png';
@@ -30,7 +30,7 @@ const parcours = [
     <div class={`${conteneur} relative grid items-center gap-10 pb-10 pt-2 md:grid-cols-[1fr_1.2fr] md:pb-14`}>
       <div class="relative mx-auto w-full max-w-115">
         <FormeLave forme="ronde" couleur="moutarde" class="absolute inset-0 h-full w-full" />
-        <Image src={autoportrait} alt="Autoportrait dessiné d'Inès" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" loading="eager" class={`${perso} relative mx-auto w-[90%] pt-[8%]`} />
+        <Image src={autoportrait} alt="Autoportrait dessiné d'Inès" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" loading="eager" class={`relative mx-auto w-[90%] pt-[8%]`} />
       </div>
       <div>
         <h1 id="titre-apropos" class={`${titreEcho} text-[clamp(4rem,9vw,7.5rem)]`}>Moi, c'est Inès</h1>

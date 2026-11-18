@@ -15,7 +15,7 @@
 - [à compléter : préparation de la soutenance maquette, note de positionnement, prototype]
 
 ## Octobre 2026
-- Soutenance maquette : 9,5/20. Retours : métaphores trop littérales (cadres, livres) et absence de grille. Piste conseillée : partir de mon illustration pour un parti pris graphique plus affirmé.
+- Soutenance maquette Retours : métaphores trop littérales (cadres, livres) et absence de grille. Piste conseillée : partir de mon illustration pour un parti pris graphique plus affirmé.
 - Moodboard années 70 validé par mon enseignant : palette crème, rouge, orange, vert, moutarde, brun.
 
 ## Vacances de la Toussaint

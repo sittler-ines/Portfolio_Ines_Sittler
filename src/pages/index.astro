@@ -1,5 +1,5 @@
 ---
-import { carte, carteBandeau, carteBrune, conteneur, haut, lead, leadHaut, lienHaut, perso, script, titreEcho, titreEchoClair, titreSection } from '../styles/classes.js';
+import { carte, carteBandeau, carteBrune, conteneur, haut, lead, leadHaut, lienHaut, script, titreEcho, titreEchoClair, titreSection } from '../styles/classes.js';
 import { Image } from 'astro:assets';
 // Autoportrait : Astro le convertit en WebP et en plusieurs tailles (plus léger à charger)
 import autoportrait from '../assets/autoportrait.png';
@@ -57,7 +57,7 @@ const savoirFaire = [
       <div class="relative order-1 mx-auto w-full max-w-125 md:order-2">
         <FormeLave forme="ronde" couleur="moutarde" class="absolute inset-x-[4%] top-0 h-full w-[92%]" />
         <FormeLave forme="galet" couleur="rouge" class="absolute -bottom-4 -right-2 w-[36%]" />
-        <Image src={autoportrait} alt="Autoportrait dessiné d'Inès : une fille aux cheveux bruns avec une frange" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" class={`${perso} relative mx-auto w-[92%] pt-[8%]`} loading="eager" fetchpriority="high" />
+        <Image src={autoportrait} alt="Autoportrait dessiné d'Inès : une fille aux cheveux bruns avec une frange" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" class={`relative mx-auto w-[92%] pt-[8%]`} loading="eager" fetchpriority="high" />
       </div>
     </div>
     <Vague />

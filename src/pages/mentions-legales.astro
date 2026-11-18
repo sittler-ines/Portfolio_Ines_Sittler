@@ -3,11 +3,12 @@ import { carte, conteneur, haut, texteRiche, titreEcho } from '../styles/classes
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Vague from '../components/Vague.astro';
 import { site } from '../config.js';
-// Mentions obligatoires pour un site personnel (loi pour la confiance dans l'économie numérique, LCEN).
+// Mentions obligatoires pour un site personnel (loi pour la confiance dans l'économie numérique, LCEN)
+// et informations sur les données personnelles du formulaire de contact (RGPD).
 // Les éléments entre crochets [ ] sont à compléter par Inès avant la mise en ligne.
 ---
 
-<BaseLayout titre="Mentions légales" description="Mentions légales du portfolio d'Inès Sittler : éditrice, hébergement, propriété intellectuelle et crédits.">
+<BaseLayout titre="Mentions légales" description="Mentions légales du portfolio d'Inès Sittler : éditrice, hébergement, propriété intellectuelle, données personnelles et crédits.">
   <section class={`${haut}`} aria-labelledby="titre-mentions">
     <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
       <h1 id="titre-mentions" class={`${titreEcho} text-[clamp(3.5rem,10vw,7rem)]`}>Mentions légales</h1>
@@ -33,8 +34,28 @@ import { site } from '../config.js';
         <h2>Liens vers d'autres sites</h2>
         <p>Ce site contient des liens vers Behance, LinkedIn et les sites de mes projets. Je ne suis pas responsable du contenu de ces sites.</p>
 
-        <h2>Données personnelles et cookies</h2>
-        <p>Ce site n'utilise aucun cookie de suivi ni outil de mesure d'audience. Ce qui concerne le formulaire de contact est expliqué sur la page <a href="/confidentialite">Données personnelles</a>.</p>
+        <h2 id="donnees-personnelles">Données personnelles</h2>
+        <p>{site.nom}, éditrice de ce site, est la seule responsable des informations envoyées avec le formulaire de contact.</p>
+        <h3>Ce qui est enregistré</h3>
+        <ul>
+          <li>ton nom ;</li>
+          <li>ton adresse e-mail ;</li>
+          <li>ton message ;</li>
+          <li>la date d'envoi.</li>
+        </ul>
+        <p>Rien d'autre n'est demandé. Comme sur tout site, le serveur garde aussi quelques jours un journal technique des visites (avec l'adresse IP), seulement pour la sécurité.</p>
+        <h3>Pourquoi</h3>
+        <p>Uniquement pour te répondre. Tes informations ne sont ni revendues, ni partagées, ni utilisées pour de la publicité ou une lettre d'information.</p>
+        <h3>Qui peut les lire</h3>
+        <p>Moi seule. Les messages sont rangés dans une base de données protégée par un mot de passe ; personne d'autre ne peut les lire depuis le site. Ils sont stockés chez l'hébergeur du site : [nom de l'hébergeur, pays des serveurs].</p>
+        <h3>Combien de temps</h3>
+        <p>Les messages sont gardés [12 mois] après notre dernier échange, puis supprimés.</p>
+        <h3>Tes droits</h3>
+        <p>Tu peux à tout moment demander à voir, corriger ou supprimer tes informations, ou t'opposer à leur utilisation. Il suffit de me l'écrire avec le <a href="/contact">formulaire de contact</a> : je réponds sous un mois au plus tard.</p>
+        <p>Si tu penses que tes droits ne sont pas respectés, tu peux adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
+
+        <h2>Cookies</h2>
+        <p>Ce site ne dépose aucun cookie de suivi et n'utilise aucun outil de mesure d'audience. Si une page de projet contient une vidéo, elle est intégrée en mode « sans cookie » (YouTube nocookie ou Vimeo avec l'option « ne pas suivre »).</p>
 
         <h2>Crédits</h2>
         <p>Polices : Yellowtail (Astigmatic) et Gelasio (Eben Sorkin), sous licence SIL Open Font License. Site conçu et réalisé par {site.nom} avec Astro, Tailwind CSS et PocketBase.</p>

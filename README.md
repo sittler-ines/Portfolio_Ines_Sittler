@@ -25,7 +25,7 @@ Le programme `pocketbase.exe` se télécharge sur https://pocketbase.io (il n'es
 
 ## Organisation
 
-- `src/pages/` : les pages (accueil, projets, projet, à propos, contact, mentions légales, données personnelles, plan du site, 404)
+- `src/pages/` : les pages (accueil, projets, projet, à propos, contact, mentions légales, 404)
 - `src/components/` : en-tête, pied de page, bouton, carte de projet, carrousel, vague, formes de lave
 - `src/lib/pocketbase.js` : lecture des projets et compétences, envoi des messages
 - `pocketbase/pb_migrations/` : création des collections et du contenu de départ

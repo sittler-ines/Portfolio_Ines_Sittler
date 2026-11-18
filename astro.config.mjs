@@ -16,6 +16,10 @@ export default defineConfig({
   // Le CSS est écrit directement dans chaque page : le navigateur n'attend pas un fichier en plus
   // avant d'afficher la page (meilleur score de performance sur mobile)
   build: { inlineStylesheets: 'always' },
+  // La vérification automatique d'Astro contre les envois venant d'un autre site (CSRF) refuse
+  // aussi mon propre formulaire une fois en ligne, derrière le serveur du VPS. On la coupe ici,
+  // et c'est la page contact.astro qui vérifie elle-même d'où vient l'envoi.
+  security: { checkOrigin: false },
   vite: {
     plugins: [tailwindcss()],
   },

@@ -1,5 +1,5 @@
 ---
-import { carte, carteBandeau, champ, conteneur, haut, leadHaut, lien, perso, titreEcho } from '../styles/classes.js';
+import { carte, carteBandeau, champ, conteneur, haut, leadHaut, titreEcho } from '../styles/classes.js';
 import { Image } from 'astro:assets';
 // Autoportrait : Astro le convertit en WebP et en plusieurs tailles (plus léger à charger)
 import autoportrait from '../assets/autoportrait.png';
@@ -16,6 +16,14 @@ let erreurs = /** @type {Record<string, string>} */ ({});
 let erreurGenerale = '';
 let envoye = false;
 
+// Protection contre les envois venant d'un autre site : le navigateur indique d'où vient
+// le formulaire (en-tête « Origin »). On n'accepte que mon site en ligne ou l'adresse locale.
+const originesAutorisees = [Astro.site?.origin, Astro.url.origin];
+const origine = Astro.request.headers.get('origin');
+if (Astro.request.method === 'POST' && origine && !originesAutorisees.includes(origine)) {
+  return new Response('Envoi refusé : le formulaire doit être envoyé depuis le site.', { status: 403 });
+}
+
 if (Astro.request.method === 'POST') {
   const donnees = await Astro.request.formData();
   const lire = (/** @type {string} */ cle) => String(donnees.get(cle) ?? '').trim();
@@ -25,9 +33,9 @@ if (Astro.request.method === 'POST') {
     // Champ piège rempli : c'est un robot. On fait comme si c'était envoyé.
     envoye = true;
   } else {
-    if (valeurs.nom.length < 2 || valeurs.nom.length > 100) erreurs.nom = 'Ton nom doit faire entre 2 et 100 caractères.';
+    if (!valeurs.nom) erreurs.nom = 'Indique ton nom.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valeurs.email)) erreurs.email = 'Cette adresse e-mail ne semble pas valide.';
-    if (valeurs.message.length < 10 || valeurs.message.length > 5000) erreurs.message = 'Ton message doit faire entre 10 et 5000 caractères.';
+    if (!valeurs.message) erreurs.message = 'Écris ton message.';
 
     if (Object.keys(erreurs).length === 0) {
       try {
@@ -70,7 +78,7 @@ if (Astro.request.method === 'POST') {
 
             <div class="mb-6">
               <label for="nom" class="mb-2 block font-semibold">Nom</label>
-              <input id="nom" name="nom" type="text" required maxlength="100" autocomplete="name" value={valeurs.nom} class={`${champ}`}
+              <input id="nom" name="nom" type="text" required autocomplete="name" value={valeurs.nom} class={`${champ}`}
                 aria-invalid={erreurs.nom ? 'true' : undefined} aria-describedby={erreurs.nom ? 'erreur-nom' : undefined} />
               {erreurs.nom && <p id="erreur-nom" class="mt-2 font-semibold">Erreur : {erreurs.nom}</p>}
             </div>
@@ -84,7 +92,7 @@ if (Astro.request.method === 'POST') {
 
             <div class="mb-6">
               <label for="message" class="mb-2 block font-semibold">Message</label>
-              <textarea id="message" name="message" rows="6" required minlength="10" maxlength="5000" class={`${champ}`}
+              <textarea id="message" name="message" rows="6" required class={`${champ}`}
                 aria-invalid={erreurs.message ? 'true' : undefined} aria-describedby={erreurs.message ? 'erreur-message' : undefined}>{valeurs.message}</textarea>
               {erreurs.message && <p id="erreur-message" class="mt-2 font-semibold">Erreur : {erreurs.message}</p>}
             </div>
@@ -95,14 +103,13 @@ if (Astro.request.method === 'POST') {
               <input id="site_web" name="site_web" type="text" tabindex="-1" autocomplete="off" />
             </div>
 
-            <p class="mb-6 text-base italic">Ton nom et ton e-mail servent seulement à te répondre. Voir la page <a href="/confidentialite" class={`${lien}`}>Données personnelles</a>.</p>
             <Bouton type="submit" couleur="rouge">Envoyer</Bouton>
           </div>
         </form>
 
         <div class="relative mx-auto w-full max-w-95">
           <FormeLave forme="haute" couleur="orange" class="absolute inset-0 h-full w-full" />
-          <Image src={autoportrait} alt="" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" loading="eager" class={`${perso} relative mx-auto w-[88%] pt-[10%]`} />
+          <Image src={autoportrait} alt="" widths={[300, 545]} sizes="(min-width: 768px) 460px, 90vw" loading="eager" class={`relative mx-auto w-[88%] pt-[10%]`} />
         </div>
       </div>
     )}

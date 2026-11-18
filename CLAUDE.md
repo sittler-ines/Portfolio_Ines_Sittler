@@ -6,7 +6,7 @@ Maquette de référence : Figma, page « Prototype — Rétro + Base v2 » (desk
 ## Direction artistique (ne pas changer sans Inès)
 
 - Palette STRICTE : crème `#F2DFA8`, rouge `#C83F3A`, orange `#E47B45`, vert `#6F7D3C`, moutarde `#E2A83B`, brun `#35251F`.
-- Haut de chaque page (et en-tête) VERT avec formes de lave qui flottent (animation `lave`), terminé par une vague vers le fond brun. Sur ce vert, texte crème en grand seulement (lead 24px, liens 20px gras) ou dans une carte crème.
+- Haut de chaque page (et en-tête) VERT avec formes de lave fixes (aucune animation : ni formes ni autoportrait), terminé par une vague vers le fond brun. Sur ce vert, texte crème en grand seulement (lead 24px, liens 20px gras) ou dans une carte crème.
 - Accueil : « Ce que je fais » est un grand bloc orange qui arrive et repart avec une trame de points (composant `Trame`). Pas de lien « Accueil » dans le menu (le nom y ramène). Aucune adresse e-mail affichée : tout passe par le formulaire.
 - Yellowtail pour le nom et les titres (avec l'écho moutarde + rouge : `.titre-echo`), Gelasio pour le texte.
 - Cartes rétro : crème, contour brun 4px, ombre décalée moutarde (`.carte`, `.carte-bandeau`). Projets de l'accueil en carrousel.
@@ -23,9 +23,9 @@ Maquette de référence : Figma, page « Prototype — Rétro + Base v2 » (desk
 ## Technique
 
 - Astro SSR (`@astrojs/node`), Tailwind v4, JS vanilla dans `src/scripts/`.
-- **Tout le style est en classes Tailwind dans les `.astro` : aucun bloc `<style>`, aucune classe CSS maison.** `src/styles/global.css` ne contient que `@theme` (couleurs `creme`… `brun`, polices `font-script`/`font-texte`, tailles `text-titre`/`text-section`/`text-carte`/`text-lead`/`text-lead-haut`, ombres `shadow-retro`/`shadow-retro-brun`/`shadow-bouton`…, `text-shadow-echo`, `rounded-carte`, `animate-perso`) et une petite `@layer base` (focus, réduction des animations).
-- Les suites de classes répétées sont des constantes dans `src/styles/classes.js` (`conteneur`, `haut`, `titreEcho`, `titreSection`, `lead`/`leadHaut`, `lien`/`lienHaut`, `carte`/`carteBrune`, `carteBandeau`, `champ`, `texteRiche`, `script`, `perso`), utilisées avec `class={`${carte} mt-6`}`. Ne pas mettre deux classes qui règlent la même propriété (ex. deux ombres) : utiliser la variante (`carteBrune`).
-- Le JS cible des attributs `data-*` (pas des classes) : `data-piste`, `data-point`/`data-actif`, `data-lave`.
+- **Tout le style est en classes Tailwind dans les `.astro` : aucun bloc `<style>`, aucune classe CSS maison.** `src/styles/global.css` ne contient que `@theme` (couleurs `creme`… `brun`, polices `font-script`/`font-texte`, tailles `text-titre`/`text-section`/`text-carte`/`text-lead`/`text-lead-haut`, ombres `shadow-retro`/`shadow-retro-brun`/`shadow-bouton`…, `text-shadow-echo`, `rounded-carte`) et une petite `@layer base` (focus, réduction des animations).
+- Les suites de classes répétées sont des constantes dans `src/styles/classes.js` (`conteneur`, `haut`, `titreEcho`, `titreSection`, `lead`/`leadHaut`, `lien`/`lienHaut`, `carte`/`carteBrune`, `carteBandeau`, `champ`, `texteRiche`, `script`), utilisées avec `class={`${carte} mt-6`}`. Ne pas mettre deux classes qui règlent la même propriété (ex. deux ombres) : utiliser la variante (`carteBrune`).
+- Le JS cible des attributs `data-*` (pas des classes) : `data-piste`, `data-point`/`data-actif`.
 - Classes Tailwind de couleur écrites en entier (pas de `bg-${x}`).
 - PocketBase : `npm run db` (port 8090) puis `npm run dev` (port 4330). Collections `projects`, `skills` (lien + logo), `qualities` (soft skills choisies par Inès), `messages` créées par `pocketbase/pb_migrations/`.
 - `src/lib/pocketbase.js` : `getProjets({ type })`, `getProjet(slug)`, `getCompetences()` (groupées par catégorie), `getQualites()`, `envoyerMessage()`. Les lectures ne plantent jamais.

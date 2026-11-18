@@ -48,5 +48,3 @@ export const texteRiche = [
 // Écriture rétro (Yellowtail) pour un texte court
 export const script = 'font-script font-normal leading-none';
 
-// Mon autoportrait qui flotte (seulement si la personne n'a pas demandé moins d'animations)
-export const perso = 'motion-safe:animate-perso origin-[50%_90%]';

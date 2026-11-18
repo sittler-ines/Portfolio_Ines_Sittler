@@ -1,22 +1,29 @@
 ---
+// Page 404 : affichée quand une adresse n'existe pas. Tout est centré : mon autoportrait,
+// « 404 », une phrase et un bouton pour revenir à l'accueil.
+// Pas de fond brun : le vert passe au moutarde du pied de page avec une trame de points.
+import { Image } from 'astro:assets';
+import autoportrait from '../assets/autoportrait.png';
 import { conteneur, haut, leadHaut, titreEcho } from '../styles/classes.js';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Vague from '../components/Vague.astro';
+import Trame from '../components/Trame.astro';
 import FormeLave from '../components/FormeLave.astro';
 import Bouton from '../components/Bouton.astro';
 ---
 
-<BaseLayout titre="Page introuvable" description="Cette page n'existe pas ou a été déplacée.">
-  <section class={`${haut}`} aria-labelledby="titre-404">
-    <FormeLave forme="ronde" couleur="moutarde" class="absolute -right-24 -top-10 w-72" />
-    <div class={`${conteneur} relative pb-12 pt-2`}>
-      <h1 id="titre-404" class={`${titreEcho} text-titre`}>Oups !</h1>
-      <p class={`${leadHaut} mt-6`}>Cette page n'existe pas ou a été déplacée.</p>
-      <div class="mt-8 flex flex-wrap gap-4">
-        <Bouton href="/">Retour à l'accueil</Bouton>
-        <Bouton href="/projets" couleur="creme">Voir mes projets</Bouton>
+<BaseLayout titre="Page introuvable" description="Cette page a disparu du storyboard." sansBrun>
+  <section class={haut} aria-labelledby="titre-404">
+    <div class={`${conteneur} relative flex flex-col items-center pb-14 pt-4 text-center`}>
+      <!-- Mon autoportrait posé sur une forme de lave, comme à l'accueil -->
+      <div class="relative w-full max-w-60">
+        <FormeLave forme="ronde" couleur="moutarde" class="absolute inset-x-[4%] top-0 h-full w-[92%]" />
+        <Image src={autoportrait} alt="" widths={[240, 480]} sizes="240px" class="relative mx-auto w-[92%] pt-[8%]" loading="eager" />
       </div>
+      <h1 id="titre-404" class={`${titreEcho} mt-6 text-titre`}>404</h1>
+      <p class={`${leadHaut} mt-4`}>Cette page a disparu du storyboard.</p>
+      <div class="mt-8"><Bouton href="/">Retour à l'accueil</Bouton></div>
     </div>
-    <Vague />
   </section>
+  <!-- Transition : gros points verts qui rapetissent sur le moutarde -->
+  <Trame couleur="vert" sens="descend" id="trame-404" />
 </BaseLayout>
