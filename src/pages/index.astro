@@ -49,7 +49,7 @@ const savoirFaire = [
         <div class="mt-8 flex flex-wrap items-center gap-4">
           <Bouton href="#projets">Voir mes projets</Bouton>
           <Bouton href="/contact" couleur="creme">M'écrire</Bouton>
-          {site.cv && <Bouton href={site.cv} couleur="creme">Mon CV</Bouton>}
+          {site.cv && <Bouton href={site.cv} couleur="creme" telecharger>Mon CV</Bouton>}
           <a href={site.behance} target="_blank" rel="noopener" class={`${lienHaut} ml-2`}>Behance</a>
           <a href={site.linkedin} target="_blank" rel="noopener" class={`${lienHaut}`}>LinkedIn</a>
         </div>

@@ -1,0 +1,48 @@
+---
+// Petite galerie d'images d'un projet, en mosaïque : chaque image est entière (jamais coupée)
+// et garde sa forme (2 colonnes sur mobile, 3 sur tablette, 4 sur grand écran).
+// Un clic l'ouvre en grand dans une fenêtre (script : src/scripts/galerie.js).
+// images : liste des adresses des images ; titre : nom du projet (pour les textes alternatifs).
+const { images = [], titre = '' } = Astro.props;
+
+// Bouton rond rétro (flèches et fermeture de la fenêtre)
+const rond = 'grid size-14 cursor-pointer place-items-center rounded-full border-3 border-brun bg-creme text-2xl font-semibold text-brun shadow-fleche';
+---
+<div data-galerie>
+  <p class="mb-6 italic">Clique sur une image pour l'agrandir.</p>
+  <ul class="columns-2 gap-5 sm:columns-3 lg:columns-4">
+    {images.map((url, i) => (
+      <li class="mb-5 break-inside-avoid">
+        <button
+          type="button"
+          class="group block w-full cursor-zoom-in overflow-hidden rounded-2xl border-3 border-brun shadow-fleche transition duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5"
+          aria-label={`Agrandir l'image ${i + 1} du projet ${titre}`}
+          data-image={i}
+        >
+          <img src={url} alt={`${titre}, image ${i + 1}`} loading="lazy" class="w-full transition duration-300 group-hover:scale-[1.03]" />
+        </button>
+      </li>
+    ))}
+  </ul>
+
+  <!-- Fenêtre d'agrandissement : l'image en grand, les flèches et le bouton pour fermer -->
+  <dialog
+    class="m-auto max-h-none max-w-none bg-transparent p-0 backdrop:bg-brun/90"
+    aria-label={`Images du projet ${titre}`}
+    data-fenetre
+  >
+    <div class="flex h-[100dvh] w-[100vw] flex-col items-center justify-center gap-4 p-4">
+      <button type="button" class={`${rond} self-end`} aria-label="Fermer" data-fermer>✕</button>
+      <img src="" alt="" class="max-h-[75dvh] max-w-full rounded-carte border-4 border-creme object-contain" data-grande />
+      <div class="flex items-center gap-6" hidden={images.length < 2}>
+        <button type="button" class={rond} aria-label="Image précédente" data-precedente>←</button>
+        <p class="min-w-16 text-center font-semibold text-creme" data-compteur></p>
+        <button type="button" class={`${rond} bg-moutarde`} aria-label="Image suivante" data-suivante>→</button>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  import '../scripts/galerie.js';
+</script>

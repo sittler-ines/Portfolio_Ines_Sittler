@@ -2,12 +2,15 @@
 import { carte, carteBandeau, conteneur, haut, leadHaut, lien, lienHaut, script, texteRiche, titreEcho, titreSection } from '../../styles/classes.js';
 // Page d'un projet : l'étude de cas (contexte, rôle, processus, choix techniques, résultat).
 // Chaque partie s'affiche seulement si elle est remplie dans PocketBase.
+// Peu de cartes : l'étude de cas est écrite directement sur le fond, et une seule fiche « En bref »
+// regroupe les infos, les outils et les qualités.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Vague from '../../components/Vague.astro';
 import FormeLave from '../../components/FormeLave.astro';
 import Bouton from '../../components/Bouton.astro';
 import Competence from '../../components/Competence.astro';
 import Qualites from '../../components/Qualites.astro';
+import Galerie from '../../components/Galerie.astro';
 import { getProjet, getProjets } from '../../lib/pocketbase.js';
 
 const projet = await getProjet(Astro.params.slug);
@@ -18,13 +21,13 @@ const tous = await getProjets();
 const index = tous.findIndex((p) => p.slug === projet.slug);
 const suivant = tous.length > 1 ? tous[(index + 1) % tous.length] : null;
 
-// Les 5 parties de l'étude de cas, avec la couleur de leur bandeau
+// Les 5 parties de l'étude de cas
 const parties = [
-  { titre: 'Le contexte et la commande', html: projet.contexte, couleurs: 'bg-moutarde text-brun' },
-  { titre: 'Mon rôle', html: projet.monRole, couleurs: 'bg-orange text-brun' },
-  { titre: 'Mon processus', html: projet.processus, couleurs: 'bg-vert text-creme' },
-  { titre: 'Mes choix techniques', html: projet.technique, couleurs: 'bg-rouge text-creme' },
-  { titre: 'Le résultat', html: projet.resultat, couleurs: 'bg-moutarde text-brun' },
+  { titre: 'Le contexte et la commande', html: projet.contexte },
+  { titre: 'Mon rôle', html: projet.monRole },
+  { titre: 'Mon processus', html: projet.processus },
+  { titre: 'Mes choix techniques', html: projet.technique },
+  { titre: 'Le résultat', html: projet.resultat },
 ].filter((p) => p.html);
 
 const fiche = [
@@ -49,37 +52,37 @@ function lireVideo(url) {
   return { lien: url };
 }
 const video = lireVideo(projet.video);
+
+// Image à côté du titre : le mockup s'il y en a un, sinon la capture du projet
+const visuel = projet.mockup ?? projet.vignetteGrande;
 ---
 
 <BaseLayout titre={projet.titre} description={projet.resume || `Le projet ${projet.titre}, par Inès Sittler.`} image={projet.couverture ?? undefined}>
   <section class={`${haut}`} aria-labelledby="titre-projet">
     <FormeLave forme="haute" couleur="moutarde" class="absolute -right-16 -top-16 w-36 md:-right-20 md:w-96" />
-    <div class={`${conteneur} relative pb-10 pt-2 md:pb-14`}>
-      <a href="/projets" class={`${lienHaut} inline-flex min-h-11 items-center`}><span aria-hidden="true">←&nbsp;</span>Tous les projets</a>
-      <h1 id="titre-projet" class={`${titreEcho} text-titre mt-2`}>{projet.titre}</h1>
-      {projet.resume && <p class={`${leadHaut} mt-6 max-w-[56ch]`}>{projet.resume}</p>}
+    <!-- Haut de la page : le titre et le résumé à gauche, le mockup (ou la capture) à droite -->
+    <div class={`${conteneur} relative grid items-center gap-10 pb-10 pt-2 md:pb-14 lg:grid-cols-[1fr_1.1fr]`}>
+      <div>
+        <a href="/projets" class={`${lienHaut} inline-flex min-h-11 items-center`}><span aria-hidden="true">←&nbsp;</span>Tous les projets</a>
+        <h1 id="titre-projet" class={`${titreEcho} text-titre mt-2`}>{projet.titre}</h1>
+        {projet.resume && <p class={`${leadHaut} mt-6 max-w-[48ch]`}>{projet.resume}</p>}
+      </div>
+      {visuel && (
+        <img src={visuel} alt={`Aperçu du projet ${projet.titre}`} fetchpriority="high"
+          class="relative w-full" />
+      )}
     </div>
     <Vague />
   </section>
 
   <div class={`${conteneur} pt-14`}>
-    {projet.couverture && (
-      <figure class={`${carte}`}>
-        <img
-          src={projet.vignetteGrande}
-          srcset={`${projet.vignette} 800w, ${projet.vignetteGrande} 1200w`}
-          sizes="(min-width: 1280px) 1200px, 92vw"
-          alt={`Capture du site ${projet.titre}`} width="1200" height="675" fetchpriority="high" class="w-full" />
-      </figure>
-    )}
-
-    <div class="mt-16 grid items-start gap-10 lg:grid-cols-[1fr_360px]">
-      <!-- L'étude de cas -->
-      <div class="flex flex-col gap-10">
-        {parties.map((p) => (
-          <section class={`${carte}`}>
-            <h2 class={`${carteBandeau} ${p.couleurs}`}>{p.titre}</h2>
-            <div class={`${texteRiche} px-6 py-6 md:px-8`} set:html={p.html} />
+    <div class="grid items-start gap-10 lg:grid-cols-[1fr_360px]">
+      <!-- L'étude de cas : texte directement sur le fond brun, un trait moutarde entre les parties -->
+      <div>
+        {parties.map((p, i) => (
+          <section class:list={['py-8', i > 0 && 'border-t-2 border-moutarde/40', i === 0 && 'pt-0']}>
+            <h2 class={`${script} text-[clamp(2.4rem,4vw,3.2rem)] text-moutarde`}>{p.titre}</h2>
+            <div class={`${texteRiche} mt-4 max-w-[68ch] text-lg/relaxed`} set:html={p.html} />
           </section>
         ))}
       </div>
@@ -95,29 +98,24 @@ const video = lireVideo(projet.video);
             </div>
           ))}
         </dl>
-        {projet.lien && <p class="px-6 pb-6"><a href={projet.lien} target="_blank" rel="noopener" class={`${lien}`}>Voir le site en ligne</a></p>}
+        {projet.outilsLies.length > 0 && (
+          <div class="border-t-2 border-brun/15 px-6 py-4">
+            <h3 class="mb-3 font-semibold italic">Outils utilisés</h3>
+            <ul class="grid grid-cols-3 gap-2">
+              {projet.outilsLies.map((c) => <li><Competence {...c} /></li>)}
+            </ul>
+          </div>
+        )}
+        {projet.qualites.length > 0 && (
+          <div class="border-t-2 border-brun/15 px-6 py-4">
+            <h3 class="mb-3 font-semibold italic">Ce que ce projet montre de moi</h3>
+            <Qualites qualites={projet.qualites} petit />
+          </div>
+        )}
+        {projet.lien && <p class="border-t-2 border-brun/15 px-6 py-4"><a href={projet.lien} target="_blank" rel="noopener" class={`${lien}`}>Voir le site en ligne</a></p>}
       </aside>
     </div>
 
-    <!-- Outils et qualités liés au projet (cochés dans PocketBase), sur toute la largeur -->
-    {(projet.outilsLies.length > 0 || projet.qualites.length > 0) && (
-      <div class="mt-10 grid items-start gap-10 md:grid-cols-[1fr_2fr]">
-        {projet.outilsLies.length > 0 && (
-          <section class={`${carte}`}>
-            <h2 class={`${carteBandeau} bg-vert text-creme`}>Outils utilisés</h2>
-            <ul class="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-3 p-5">
-              {projet.outilsLies.map((c) => <li><Competence {...c} /></li>)}
-            </ul>
-          </section>
-        )}
-        {projet.qualites.length > 0 && (
-          <section class={`${carte}`}>
-            <h2 class={`${carteBandeau} bg-orange text-brun`}>Ce que ce projet montre de moi</h2>
-            <div class="p-6"><Qualites qualites={projet.qualites} /></div>
-          </section>
-        )}
-      </div>
-    )}
 
     {video && (
       <section class="mt-16" aria-labelledby="titre-video">
@@ -133,17 +131,15 @@ const video = lireVideo(projet.video);
     {projet.galerie.length > 0 && (
       <section class="mt-16" aria-labelledby="titre-images">
         <h2 id="titre-images" class={`${titreSection} text-moutarde`}>En images</h2>
-        <ul class="mt-8 grid gap-8 md:grid-cols-2">
-          {projet.galerie.map((url, i) => <li class={`${carte}`}><img src={url} alt={`${projet.titre}, image ${i + 1}`} loading="lazy" class="w-full" /></li>)}
-        </ul>
+        <div class="mt-8"><Galerie images={projet.galerie} titre={projet.titre} /></div>
       </section>
     )}
 
     {suivant && (
       <nav aria-label="Projet suivant" class="mt-20 flex justify-end">
-        <a href={`/projets/${suivant.slug}`} class={`${carte} block px-8 py-5 no-underline`}>
+        <a href={`/projets/${suivant.slug}`} class="group block text-right no-underline">
           <span class="block font-semibold italic">Projet suivant <span aria-hidden="true">→</span></span>
-          <span class={`${script} mt-1 block text-5xl text-rouge`}>{suivant.titre}</span>
+          <span class={`${script} mt-1 block text-5xl text-moutarde group-hover:underline`}>{suivant.titre}</span>
         </a>
       </nav>
     )}

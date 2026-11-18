@@ -8,6 +8,7 @@ import Competence from '../components/Competence.astro';
 import Vague from '../components/Vague.astro';
 import FormeLave from '../components/FormeLave.astro';
 import Bouton from '../components/Bouton.astro';
+import { site } from '../config.js';
 import Qualites from '../components/Qualites.astro';
 import { getCompetences, getQualites } from '../lib/pocketbase.js';
 
@@ -81,6 +82,9 @@ const parcours = [
         </li>
       ))}
     </ol>
-    <div class="mt-12"><Bouton href="/contact">M'écrire</Bouton></div>
+    <div class="mt-12 flex flex-wrap gap-4">
+      <Bouton href="/contact">M'écrire</Bouton>
+      {site.cv && <Bouton href={site.cv} couleur="creme" telecharger>Télécharger mon CV</Bouton>}
+    </div>
   </section>
 </BaseLayout>

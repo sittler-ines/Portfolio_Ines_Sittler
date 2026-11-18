@@ -13,10 +13,11 @@ const fleche = 'size-16 cursor-pointer rounded-full border-3 border-brun text-[1
     <button type="button" class={`${fleche} bg-creme shadow-fleche`} data-precedent aria-label="Projet précédent">←</button>
     <button type="button" class={`${fleche} bg-moutarde shadow-fleche-creme`} data-suivant aria-label="Projet suivant">→</button>
   </div>
-  <!-- La piste : une colonne par carte (82 % de large sur mobile, 46 % sur tablette, 40 % sur grand écran),
-       défilement horizontal aimanté, barre de défilement cachée, un peu de marge pour l'ombre des cartes -->
+  <!-- La piste : une colonne par carte, sans jamais couper de carte : 1 carte entière sur mobile,
+       2 sur tablette, 3 sur grand écran (largeur calculée en retirant les espaces de 1,75 rem entre les cartes).
+       Défilement horizontal aimanté, barre de défilement cachée, un peu de marge pour l'ombre des cartes -->
   <ul
-    class="grid snap-x snap-mandatory auto-cols-[82%] grid-flow-col gap-7 overflow-x-auto pt-2 pr-4 pb-6 pl-1 [scrollbar-width:none] md:auto-cols-[46%] min-[1100px]:auto-cols-[40%] [&::-webkit-scrollbar]:hidden [&>li]:snap-start"
+    class="grid snap-x snap-mandatory auto-cols-[100%] grid-flow-col gap-7 overflow-x-auto pt-2 pr-4 pb-6 pl-1 [scrollbar-width:none] md:auto-cols-[calc((100%-1.75rem)/2)] lg:auto-cols-[calc((100%-3.5rem)/3)] [&::-webkit-scrollbar]:hidden [&>li]:snap-start"
     aria-label={titre} tabindex="0" data-piste
   >
     <slot />

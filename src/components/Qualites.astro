@@ -1,11 +1,18 @@
 ---
 // Mes qualités (soft skills) : une pastille rétro par qualité, les couleurs de la palette à tour de rôle.
-// Texte en gras à 1.25rem : assez grand pour que le crème sur rouge et sur vert reste lisible.
-const { qualites = [] } = Astro.props;
-const couleurs = ['bg-rouge text-creme', 'bg-moutarde text-brun', 'bg-vert text-creme', 'bg-orange text-brun'];
+// Taille normale : texte gras à 1.25rem, assez grand pour que le crème sur rouge et sur vert reste lisible.
+// petit : pastilles plus petites (ex. dans la fiche d'un projet) ; le texte est alors toujours brun
+// sur moutarde ou orange, pour garder un bon contraste.
+const { qualites = [], petit = false } = Astro.props;
+const couleurs = petit
+  ? ['bg-moutarde text-brun', 'bg-orange text-brun']
+  : ['bg-rouge text-creme', 'bg-moutarde text-brun', 'bg-vert text-creme', 'bg-orange text-brun'];
+const taille = petit
+  ? 'border-2 px-3 py-0.5 text-base shadow-mini'
+  : 'border-3 px-5 py-2 text-xl shadow-petite';
 ---
-<ul class="flex flex-wrap gap-4">
+<ul class:list={['flex flex-wrap', petit ? 'gap-2' : 'gap-4']}>
   {qualites.map((q, i) => (
-    <li class={`rounded-full border-3 border-brun px-5 py-2 text-xl leading-snug font-bold shadow-petite ${couleurs[i % couleurs.length]}`}>{q}</li>
+    <li class={`rounded-full border-brun leading-snug font-bold ${taille} ${couleurs[i % couleurs.length]}`}>{q}</li>
   ))}
 </ul>

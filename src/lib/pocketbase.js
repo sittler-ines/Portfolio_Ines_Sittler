@@ -32,6 +32,8 @@ function versProjet(r) {
     // Version de 1200 px pour la grande image de la page du projet
     vignetteGrande: r.cover ? pb.files.getURL(r, r.cover, { thumb: '1200x0' }) : null,
     galerie: (r.gallery || []).map((f) => pb.files.getURL(r, f)),
+    // Image à côté du titre sur la page du projet (mockup ou petit visuel)
+    mockup: r.mockup ? pb.files.getURL(r, r.mockup) : null,
     lien: r.link || '',
     video: r.video || '',
     // Outils (avec logo et lien) et qualités cochés pour ce projet dans PocketBase

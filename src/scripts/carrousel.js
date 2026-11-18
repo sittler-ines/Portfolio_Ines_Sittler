@@ -7,9 +7,8 @@ for (const carrousel of document.querySelectorAll('[data-carrousel]')) {
   const suivant = carrousel.querySelector('[data-suivant]');
   const points = [...carrousel.querySelectorAll('[data-point]')];
 
-  // On affiche les contrôles maintenant que le JavaScript fonctionne
-  carrousel.querySelector('[data-controles]').hidden = false;
-  carrousel.querySelector('[data-points]').hidden = false;
+  const controles = carrousel.querySelector('[data-controles]');
+  const zonePoints = carrousel.querySelector('[data-points]');
 
   // Un « pas » = la distance entre le début de deux cartes
   const pas = () => (cartes[1] ? cartes[1].offsetLeft - cartes[0].offsetLeft : piste.clientWidth);
@@ -19,6 +18,11 @@ for (const carrousel of document.querySelectorAll('[data-carrousel]')) {
 
   // Met à jour le point actif et désactive les flèches au début et à la fin
   function mettreAJour() {
+    // Flèches et points seulement s'il y a des cartes cachées à faire défiler
+    // (sur grand écran, les 3 projets tiennent en entier : rien à afficher)
+    const aDefiler = piste.scrollWidth > piste.clientWidth + 2;
+    controles.hidden = !aDefiler;
+    zonePoints.hidden = !aDefiler;
     const index = Math.round(piste.scrollLeft / pas());
     points.forEach((p, i) => p.toggleAttribute('data-actif', i === index));
     precedent.disabled = piste.scrollLeft <= 2;
