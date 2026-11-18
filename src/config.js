@@ -7,7 +7,7 @@ export const site = {
   recherche: "En recherche d'un stage en création visuelle, du 29 mars au 4 juin 2027.",
   behance: 'https://www.behance.net/inssittler',
   linkedin: 'https://www.linkedin.com/in/in%C3%A8s-sittler-12148b398/',
-  cv: null,
+  cv: '/cv-ines-sittler.pdf',
   // Pas de lien « Accueil » : c'est le nom, en haut à gauche, qui ramène à l'accueil.
   nav: [
     { label: 'Projets', href: '/projets' },

@@ -19,9 +19,10 @@ const qualites = await getQualites();
 // Couleur du bandeau de chaque catégorie (classes écrites en entier pour Tailwind)
 const bandeaux = ['bg-rouge text-creme', 'bg-orange text-brun', 'bg-vert text-creme'];
 
+// Mon parcours, dans l'ordre du temps (de gauche à droite sur la frise).
 const parcours = [
-  { date: "2025 — aujourd'hui", titre: 'BUT MMI, 2e année', lieu: 'Montbéliard, parcours Création numérique', texte: "Métiers du Multimédia et de l'Internet : design graphique, développement web, audiovisuel et communication." },
   { date: '2025', titre: 'Bac STMG', lieu: 'Lycée Koeberlé, Sélestat', texte: "Spécialité Systèmes d'information de gestion (SIG)." },
+  { date: "2025 — aujourd'hui", titre: 'BUT MMI', lieu: 'Montbéliard, parcours Création numérique', texte: "Métiers du Multimédia et de l'Internet : design graphique, développement web, audiovisuel et communication." },
 ];
 ---
 
@@ -70,18 +71,23 @@ const parcours = [
 
   <section class={`${conteneur} pt-20`} aria-labelledby="titre-parcours">
     <h2 id="titre-parcours" class={`${titreSection} text-moutarde`}>Mon parcours</h2>
-    <ol class="mt-10 grid gap-8 md:grid-cols-2">
+    <!-- La frise : une ligne moutarde avec un point par étape.
+         Verticale sur mobile (ligne à gauche), horizontale sur grand écran (ligne en haut). -->
+    <div class="relative mt-12">
+      <div aria-hidden="true" class="absolute top-0 bottom-0 left-[11px] w-1 rounded-full bg-moutarde md:top-[11px] md:right-0 md:bottom-auto md:left-0 md:h-1 md:w-auto"></div>
+      <ol class="grid gap-10 md:grid-cols-2 md:gap-8">
       {parcours.map((e) => (
-        <li class={`${carte}`}>
-          <p class={`${carteBandeau} bg-moutarde text-brun`}>{e.date}</p>
-          <div class="px-6 py-5">
-            <h3 class={`${script} text-5xl text-rouge`}>{e.titre}</h3>
-            <p class="mt-2 font-semibold">{e.lieu}</p>
-            <p class="mt-1">{e.texte}</p>
-          </div>
+        <li class="relative pl-12 md:pl-0 md:pt-14">
+          <!-- Le point de l'étape sur la frise -->
+          <span aria-hidden="true" class="absolute top-0 left-0 size-7 rounded-full border-4 border-moutarde bg-rouge"></span>
+          <p class="font-bold text-moutarde">{e.date}</p>
+          <h3 class={`${script} mt-1 text-5xl text-creme`}>{e.titre}</h3>
+          <p class="mt-2 font-semibold">{e.lieu}</p>
+          {e.texte && <p class="mt-1 max-w-[34ch] text-creme/85">{e.texte}</p>}
         </li>
       ))}
-    </ol>
+      </ol>
+    </div>
     <div class="mt-12 flex flex-wrap gap-4">
       <Bouton href="/contact">M'écrire</Bouton>
       {site.cv && <Bouton href={site.cv} couleur="creme" telecharger>Télécharger mon CV</Bouton>}
