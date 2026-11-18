@@ -3,6 +3,8 @@
 // et garde sa forme (2 colonnes sur mobile, 3 sur tablette, 4 sur grand écran).
 // Un clic l'ouvre en grand dans une fenêtre (script : src/scripts/galerie.js).
 // images : liste des adresses des images ; titre : nom du projet (pour les textes alternatifs).
+// Ce que le composant reçoit : une liste d'adresses d'images (texte) et le nom du projet
+interface Props { images?: string[]; titre?: string }
 const { images = [], titre = '' } = Astro.props;
 
 // Bouton rond rétro (flèches et fermeture de la fenêtre)
@@ -31,7 +33,7 @@ const rond = 'grid size-14 cursor-pointer place-items-center rounded-full border
     aria-label={`Images du projet ${titre}`}
     data-fenetre
   >
-    <div class="flex h-[100dvh] w-[100vw] flex-col items-center justify-center gap-4 p-4">
+    <div class="flex h-dvh w-screen flex-col items-center justify-center gap-4 p-4">
       <button type="button" class={`${rond} self-end`} aria-label="Fermer" data-fermer>✕</button>
       <img src="" alt="" class="max-h-[75dvh] max-w-full rounded-carte border-4 border-creme object-contain" data-grande />
       <div class="flex items-center gap-6" hidden={images.length < 2}>

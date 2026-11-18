@@ -19,8 +19,34 @@ const {
   // Page sans fond brun (ex. la 404) : le fond de page est moutarde et le pied de page arrive sans vague
   sansBrun = false,
 } = Astro.props;
-const titrePage = titre ? `${titre} · ${site.nom}` : `${site.nom} · Portfolio`;
+const titrePage = titre ? `${titre} · ${site.nom}` : `${site.nom} · Portfolio de création visuelle`;
 const urlPage = new URL(Astro.url.pathname, Astro.site);
+
+// Données structurées (schema.org) : elles disent clairement à Google que ce site est le portfolio
+// d'Inès Sittler, et le relient à mes profils Behance et LinkedIn (meilleure chance d'apparaître
+// quand on cherche mon nom).
+const donnees = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': new URL('/#ines', Astro.site).href,
+      name: site.nom,
+      url: new URL('/', Astro.site).href,
+      image: new URL('/images/autoportrait.png', Astro.site).href,
+      jobTitle: site.role,
+      address: { '@type': 'PostalAddress', addressLocality: 'Montbéliard', addressCountry: 'FR' },
+      sameAs: [site.behance, site.linkedin],
+    },
+    {
+      '@type': 'WebSite',
+      name: `Portfolio d'${site.nom}`,
+      url: new URL('/', Astro.site).href,
+      inLanguage: 'fr',
+      author: { '@id': new URL('/#ines', Astro.site).href },
+    },
+  ],
+};
 ---
 <!doctype html>
 <!-- scroll-smooth : défilement doux vers les ancres (coupé si on a demandé moins d'animations) -->
@@ -30,6 +56,7 @@ const urlPage = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titrePage}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={site.nom} />
     <link rel="canonical" href={urlPage} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href={policeTitres} as="font" type="font/woff2" crossorigin />
@@ -41,6 +68,9 @@ const urlPage = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={urlPage} />
     <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:site_name" content={`Portfolio d'${site.nom}`} />
+    <!-- Données structurées pour les moteurs de recherche (voir plus haut) -->
+    <script type="application/ld+json" set:html={JSON.stringify(donnees)} />
   </head>
   <!-- La page fait au moins la hauteur de l'écran : le pied de page reste en bas, même sur une page courte -->
   <body class:list={['flex min-h-screen flex-col overflow-x-clip font-texte text-lg/relaxed text-creme', sansBrun ? 'bg-moutarde' : 'bg-brun']}>

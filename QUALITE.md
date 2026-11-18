@@ -27,8 +27,8 @@
 |---|---|---|---|
 | Titre et description | Chaque page a son `<title>` et sa `meta description`. | Lighthouse SEO | |
 | Structure | Un seul `h1` par page, titres dans l'ordre. | Extension HeadingsMap | |
-| Partage | Balises Open Graph (titre, description, image). | Inspecteur de publication LinkedIn | |
-| Adresses | Adresses lisibles (`/projets/olyvia`), lien canonique. **À faire : mettre la vraie adresse dans `astro.config.mjs` (`site`).** | Code source | |
+| Partage et identité | Balises Open Graph (titre, description, image, nom du site) et données structurées schema.org (Person + WebSite, reliées à Behance et LinkedIn) pour que Google associe le site à mon nom. | Inspecteur de publication LinkedIn | |
+| Adresses et exploration | Adresses lisibles (`/projets/olyvia`), lien canonique, `robots.txt` et `sitemap.xml` générés par le site (les projets de PocketBase y sont ajoutés automatiquement). | Code source | |
 
 ## Conformité juridique
 
