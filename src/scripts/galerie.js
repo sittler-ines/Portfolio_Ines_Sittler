@@ -12,7 +12,7 @@ for (const galerie of document.querySelectorAll('[data-galerie]')) {
   function afficher(n) {
     actuelle = (n + vignettes.length) % vignettes.length;
     const image = vignettes[actuelle].querySelector('img');
-    grande.src = image.src;
+    grande.src = vignettes[actuelle].dataset.originale; // l'image en taille réelle
     grande.alt = image.alt;
     compteur.textContent = `${actuelle + 1} / ${vignettes.length}`;
   }

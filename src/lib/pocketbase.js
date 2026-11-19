@@ -36,7 +36,8 @@ function versProjet(r) {
     resultat: r.result || '',
     // Capture de couverture en taille réelle (image de partage sur les réseaux)
     couverture: r.cover ? pb.files.getURL(r, r.cover) : null,
-    galerie: (r.gallery || []).map((f) => pb.files.getURL(r, f)),
+    // Galerie : chaque image en petites tailles (mosaïque) et en taille réelle (agrandissement)
+    galerie: (r.gallery || []).map((f) => ({ ...tailles(r, f, ['400x0', '800x0']), originale: pb.files.getURL(r, f) })),
     // Image de la carte du projet : la 1re image de la galerie (sinon la couverture), en 400 et 800 px
     imageCarte: tailles(r, r.gallery?.[0] || r.cover, ['400x0', '800x0']),
     // Image à côté du titre sur la page du projet : le mockup (sinon la couverture), en 400, 800 et 1200 px
