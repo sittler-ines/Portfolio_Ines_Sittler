@@ -1,8 +1,5 @@
 # Journal de bord
 
-> Brouillon rédigé à partir de l'historique réel du projet (séances de travail, maquettes Figma, retours des enseignants).
-> À relire et à compléter : les semaines marquées [à compléter] n'ont pas laissé de trace écrite.
-
 ## Semaine du 28 septembre 2026
 - Premier portfolio dans une direction artistique victorienne, à partir de mon moodboard.
 - Plusieurs pistes écartées car trop génériques : étiquettes numérotées, animations de titres, motifs chargés.
@@ -12,10 +9,9 @@
 ## Semaine du 5 octobre 2026
 - Suite de la version victorienne : projets présentés comme des tableaux, compétences en étagères.
 - Rédaction de mes textes (présentation, parcours, projets) et choix de mes 3 projets : Olyvia, Aegirhall, FlyTapFest.
-- [à compléter : préparation de la soutenance maquette, note de positionnement, prototype]
 
 ## Octobre 2026
-- Soutenance maquette Retours : métaphores trop littérales (cadres, livres) et absence de grille. Piste conseillée : partir de mon illustration pour un parti pris graphique plus affirmé.
+- Soutenance maquette. Retours : métaphores trop littérales (cadres, livres) et absence de grille. Piste conseillée : partir de mon illustration pour un parti pris graphique plus affirmé.
 - Moodboard années 70 validé par mon enseignant : palette crème, rouge, orange, vert, moutarde, brun.
 
 ## Vacances de la Toussaint
@@ -40,4 +36,9 @@
 - 17 novembre : compétences avec logos et liens, qualités (soft skills) gérées dans PocketBase, outils et qualités affichés sur chaque projet, favicon en monogramme « IS », titres reformulés après la remarque du jury.
 - 17 novembre : audit Lighthouse de toutes les pages et corrections (contraste, poids des images, chargement). Résultat : 100 en accessibilité, bonnes pratiques et référencement, 96 à 100 en performance.
 - 17 novembre : tout le style passe en classes Tailwind, en cohérence avec ma stack.
-- Reste à faire : mise en ligne sur mon domaine, parties « processus », « choix techniques » et « résultat » de mes 3 projets.
+- 17 novembre : déploiement automatique mis en place (GitHub Actions) : à chaque envoi sur GitHub, le site est construit puis installé sur mon VPS.
+- 18 et 19 novembre : mise en ligne sur portfolio.ines-sittler.fr. Le formulaire de contact était refusé en ligne (erreur 403) : la vérification d'origine d'Astro ne fonctionnait pas derrière le serveur du VPS. Je l'ai remplacée par une vérification faite dans la page de contact, et chaque message m'est maintenant envoyé par e-mail (SMTP de PocketBase).
+- 18 et 19 novembre : animations des formes et de l'autoportrait retirées, page « plan du site » supprimée, page 404, carrousel sans cartes coupées, page projet refaite (visuel à côté du titre, étude de cas en texte libre, galerie avec agrandissement).
+- 18 et 19 novembre : réécriture de tous les textes du site (vouvoiement, textes courts, recherche de stage du 29 mars au 4 juin 2027), mentions légales refaites, frise de mon parcours, bouton de téléchargement du CV dans « À propos » et « Contact ».
+- 18 et 19 novembre : études de cas des 3 projets complétées dans PocketBase, ajout des outils que j'utilise (Trello, Notion, Jira, Canva…), référencement (sitemap, robots.txt, données structurées), mockups de mes projets.
+- 19 novembre : vérifications qualité sur le site en ligne (Lighthouse, clavier, formulaire, cookies), consignées dans QUALITE.md.
