@@ -52,9 +52,6 @@ function lireVideo(url) {
   return { lien: url };
 }
 const video = lireVideo(projet.video);
-
-// Image à côté du titre : le mockup s'il y en a un, sinon la capture du projet
-const visuel = projet.mockup ?? projet.vignetteGrande;
 ---
 
 <BaseLayout titre={projet.titre} description={projet.resume || `Le projet ${projet.titre}, par Inès Sittler.`} image={projet.couverture ?? undefined}>
@@ -67,9 +64,13 @@ const visuel = projet.mockup ?? projet.vignetteGrande;
         <h1 id="titre-projet" class={`${titreEcho} text-titre mt-2`}>{projet.titre}</h1>
         {projet.resume && <p class={`${leadHaut} mt-6 max-w-[48ch]`}>{projet.resume}</p>}
       </div>
-      {visuel && (
-        <img src={visuel} alt={`Aperçu du projet ${projet.titre}`} fetchpriority="high"
-          class="relative w-full" />
+      <!-- Le mockup (ou la capture) : le navigateur choisit la largeur adaptée à l'écran (srcset).
+           Le cadre 16/10 réserve la place avant le chargement, pour que la page ne saute pas. -->
+      {projet.imageHaut && (
+        <img src={projet.imageHaut.src} srcset={projet.imageHaut.srcset}
+          sizes="(min-width: 1024px) 50vw, 100vw" width="1200" height="750"
+          alt={`Aperçu du projet ${projet.titre}`} fetchpriority="high"
+          class="relative aspect-16/10 h-auto w-full object-contain" />
       )}
     </div>
     <Vague />

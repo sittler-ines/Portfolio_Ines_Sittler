@@ -8,6 +8,15 @@ const pb = new PocketBase(url);
 // Une page peut faire plusieurs requêtes en même temps : on désactive l'annulation automatique.
 pb.autoCancellation(false);
 
+// Adresses d'une image en plusieurs largeurs, prêtes pour l'attribut srcset :
+// tailles(r, 'photo.png', ['400x0', '800x0']) → { src: '…?thumb=800x0', srcset: '…?thumb=400x0 400w, …?thumb=800x0 800w' }
+// (src = la plus grande, pour les navigateurs qui ignorent srcset). Renvoie null s'il n'y a pas d'image.
+function tailles(r, fichier, formats) {
+  if (!fichier) return null;
+  const urls = formats.map((f) => `${pb.files.getURL(r, fichier, { thumb: f })} ${parseInt(f)}w`);
+  return { src: pb.files.getURL(r, fichier, { thumb: formats.at(-1) }), srcset: urls.join(', ') };
+}
+
 // Transforme un enregistrement PocketBase (noms anglais) en objet Projet (noms français).
 function versProjet(r) {
   return {
@@ -25,15 +34,13 @@ function versProjet(r) {
     processus: r.process || '',
     technique: r.tech || '',
     resultat: r.result || '',
+    // Capture de couverture en taille réelle (image de partage sur les réseaux)
     couverture: r.cover ? pb.files.getURL(r, r.cover) : null,
-    // Petites versions de la capture (400 et 800 px de large) pour les cartes de projet
-    vignette: r.cover ? pb.files.getURL(r, r.cover, { thumb: '800x0' }) : null,
-    vignettePetite: r.cover ? pb.files.getURL(r, r.cover, { thumb: '400x0' }) : null,
-    // Version de 1200 px pour la grande image de la page du projet
-    vignetteGrande: r.cover ? pb.files.getURL(r, r.cover, { thumb: '1200x0' }) : null,
     galerie: (r.gallery || []).map((f) => pb.files.getURL(r, f)),
-    // Image à côté du titre sur la page du projet (mockup ou petit visuel)
-    mockup: r.mockup ? pb.files.getURL(r, r.mockup) : null,
+    // Image de la carte du projet : la 1re image de la galerie (sinon la couverture), en 400 et 800 px
+    imageCarte: tailles(r, r.gallery?.[0] || r.cover, ['400x0', '800x0']),
+    // Image à côté du titre sur la page du projet : le mockup (sinon la couverture), en 400, 800 et 1200 px
+    imageHaut: tailles(r, r.mockup || r.cover, ['400x0', '800x0', '1200x0']),
     lien: r.link || '',
     video: r.video || '',
     // Outils (avec logo et lien) et qualités cochés pour ce projet dans PocketBase
