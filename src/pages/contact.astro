@@ -1,5 +1,5 @@
 ---
-import { carte, carteBandeau, champ, conteneur, haut, leadHaut, titreEcho } from '../styles/classes.js';
+import { carte, carteBandeau, champ, conteneur, haut, leadHaut, lien, titreEcho } from '../styles/classes.js';
 import { Image } from 'astro:assets';
 // Autoportrait : Astro le convertit en WebP et en plusieurs tailles (plus léger à charger)
 import autoportrait from '../assets/autoportrait.png';
@@ -106,6 +106,8 @@ if (Astro.request.method === 'POST') {
             </div>
 
             <Bouton type="submit" couleur="rouge">Envoyer</Bouton>
+            <!-- Information sur les données, au moment où on les envoie (RGPD) -->
+            <p class="text-base">Vos données : voir les <a href="/mentions-legales#donnees-personnelles" class={lien}>mentions légales</a>.</p>
           </div>
         </form>
 
