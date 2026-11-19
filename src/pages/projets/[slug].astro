@@ -23,7 +23,8 @@ const suivant = tous.length > 1 ? tous[(index + 1) % tous.length] : null;
 
 // Les 5 parties de l'étude de cas
 const parties = [
-  { titre: 'Le contexte et la commande', html: projet.contexte },
+  // Un projet perso n'a pas de commande : le titre devient simplement « Le contexte »
+  { titre: projet.type === 'perso' ? 'Le contexte' : 'Le contexte et la commande', html: projet.contexte },
   { titre: 'Mon rôle', html: projet.monRole },
   { titre: 'Mon processus', html: projet.processus },
   { titre: 'Mes choix techniques', html: projet.technique },
@@ -40,7 +41,8 @@ const fiche = [
 ].filter(([, valeur]) => valeur);
 
 // Vidéo : YouTube et Vimeo intégrés sans cookies de suivi, sinon un simple lien
-function lireVideo(url) {
+// url : l'adresse de la vidéo saisie dans PocketBase (texte)
+function lireVideo(url: string) {
   if (!url) return null;
   try {
     const u = new URL(url);
@@ -103,7 +105,7 @@ const video = lireVideo(projet.video);
           <div class="border-t-2 border-brun/15 px-6 py-4">
             <h3 class="mb-3 font-semibold italic">Outils utilisés</h3>
             <ul class="grid grid-cols-3 gap-2">
-              {projet.outilsLies.map((c) => <li><Competence {...c} /></li>)}
+              {projet.outilsLies.map((c: any) => <li><Competence {...c} /></li>)}
             </ul>
           </div>
         )}
@@ -113,7 +115,7 @@ const video = lireVideo(projet.video);
             <Qualites qualites={projet.qualites} petit />
           </div>
         )}
-        {projet.lien && <p class="border-t-2 border-brun/15 px-6 py-4"><a href={projet.lien} target="_blank" rel="noopener" class={`${lien}`}>Voir le site en ligne</a></p>}
+        {projet.lien && <p class="border-t-2 border-brun/15 px-6 py-4"><a href={projet.lien} target="_blank" rel="noopener" class={`${lien}`}>{projet.lien.includes('figma.com') ? 'Voir le prototype Figma' : 'Voir le site en ligne'}</a></p>}
       </aside>
     </div>
 

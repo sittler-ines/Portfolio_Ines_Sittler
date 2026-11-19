@@ -22,9 +22,16 @@ const fleche = 'size-16 cursor-pointer rounded-full border-3 border-brun text-[1
   >
     <slot />
   </ul>
-  <!-- Les points : celui de la carte visible devient moutarde (attribut data-actif posé par le script) -->
-  <div class="mt-8 flex gap-3" data-points hidden aria-hidden="true">
-    {Array.from({ length: nombre }, () => <span class="size-3.5 rounded-full border-2 border-creme data-actif:border-moutarde data-actif:bg-moutarde" data-point />)}
+  <!-- Les points : un par position possible (le script cache ceux en trop, par exemple 3 positions
+       pour 5 projets quand 3 cartes sont visibles). Un clic fait défiler jusqu'à cette position ;
+       le point de la position affichée devient moutarde (attribut data-actif posé par le script).
+       Chaque point est un bouton de 24 px (assez grand pour le doigt) avec un rond de 14 px dedans. -->
+  <div class="mt-8 flex gap-1" data-points hidden>
+    {Array.from({ length: nombre }, (_, i) => (
+      <button type="button" class="group grid size-6 cursor-pointer place-items-center" aria-label={`Aller à la position ${i + 1}`} data-point>
+        <span class="size-3.5 rounded-full border-2 border-creme group-data-actif:border-moutarde group-data-actif:bg-moutarde"></span>
+      </button>
+    ))}
   </div>
 </div>
 <script>
